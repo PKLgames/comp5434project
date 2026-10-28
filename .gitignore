@@ -12,6 +12,13 @@ desktop.ini
 .DS_Store
 
 # ---------------------------------------------------------------------------
+# Hadoop / Spark output markers (Windows-safe copies add a checksum
+# sidecar for every part file: ".part-00000-...parquet.crc")
+# ---------------------------------------------------------------------------
+_SUCCESS
+*.crc
+
+# ---------------------------------------------------------------------------
 # Local environment / package installation (not project source)
 # ---------------------------------------------------------------------------
 .pylibs/
