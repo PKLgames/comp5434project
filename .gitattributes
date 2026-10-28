@@ -2,11 +2,21 @@
 
 # Git LFS patterns for large binary files.
 #
-# At repository setup time no file in the 50-100 MB range exists; these
-# patterns future-proof the repository so that a new parquet/npz/checkpoint
-# file in that range is stored through Git LFS instead of bloating history.
-# Remove a line if that file type should be committed as a normal object.
-*.parquet filter=lfs diff=lfs merge=lfs -text
+# NOTE (2026-10-28): these patterns are currently INACTIVE in practice, because
+# every large artifact is excluded by .gitignore instead:
+#     runs/**/*.pt, runs/**/*.npz, *.zip, *.7z ...    -> gitignored
+# Git LFS stays initialised, so re-enabling a line below is all that is needed if
+# a genuinely large binary ever has to be committed.
+#
+# The parquet pattern is deliberately commented out.  The repository tracks two
+# small (1.45 MB) test-set parquet files under test_features_with_entity/ that
+# were uploaded through the GitHub web UI, i.e. stored as plain blobs.  With
+# `filter=lfs` in force, git applies the LFS clean filter locally and computes a
+# pointer hash that can never equal the stored plain-blob hash - the files then
+# show up as permanently "modified", and any `git add` would silently rewrite
+# them into LFS pointers.  They are far below GitHub's 100 MB limit, so plain
+# blobs are the correct storage for them.
+# *.parquet filter=lfs diff=lfs merge=lfs -text
 *.npz     filter=lfs diff=lfs merge=lfs -text
 *.pt      filter=lfs diff=lfs merge=lfs -text
 *.pth     filter=lfs diff=lfs merge=lfs -text

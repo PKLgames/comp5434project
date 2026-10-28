@@ -66,8 +66,31 @@ committed.  They are reproducible from the original `Task2数据交接.zip` and 
 Part-A scripts.  Model checkpoints (~234 MB each) exceed GitHub's 100 MB file
 limit and are also excluded; retrain with `task2_model/train.py`.
 
-Git LFS is initialised.  `.gitattributes` routes parquet/npz/checkpoint/archive
-files through LFS so that future 50–100 MB artifacts can be committed safely.
+### The test split *is* committed
+
+`test_features_with_entity/` (2 parquet files, ~2.9 MB total) holds Part A's test
+features and is tracked as ordinary blobs, so a plain `git clone` is enough to
+produce a submission: it is small, and it is the one input the grading run needs.
+Produce the submission with
+
+```bash
+python task2_model/preprocess.py --test-dir test_features_with_entity \
+  --reuse artifacts --out artifacts
+python task2_model/predict.py --data artifacts --split test \
+  --checkpoint runs/full3/best.pt \
+  --ids-dir test_features_with_entity --out submission.csv
+```
+
+### Git LFS
+
+Git LFS is still initialised, but its `*.parquet` rule is **commented out**: the
+only tracked parquet files are the two small test-set files above, and routing
+them through LFS made git treat them as permanently modified (the LFS clean
+filter computes a pointer hash that can never match the plain blob that GitHub's
+web upload created), while any `git add` would have silently rewritten them into
+LFS pointers.  The remaining patterns (`*.npz`, `*.pt`, `*.zip`, `*.7z`) are all
+also excluded by `.gitignore`, so they are dormant; re-enable a line in
+`.gitattributes` if a genuinely large binary ever has to be committed.
 
 ## Note on Git identity
 
