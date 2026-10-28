@@ -1,0 +1,106 @@
+{
+  "plan": "token_plan.md section 8 step 2 (G2 subset gate)",
+  "protocol": {
+    "train_shards": 16,
+    "valid_shards": 2,
+    "train_rows": 1524869,
+    "valid_rows": 286852,
+    "epochs": 1,
+    "batch_size": 8192,
+    "lr": 0.003,
+    "weight_decay": 0.0001,
+    "seed": 42,
+    "text_dim": 256,
+    "note": "identical to the published ablation methodology (README 6.2). The V1 arm was re-run in this same environment because a different PyTorch build shifts the last decimals (1.166958 here vs 1.166614 published); compare only within this table."
+  },
+  "environment": {
+    "device": "cpu",
+    "torch": "2.14.1+cpu",
+    "threads": 16
+  },
+  "arms": {
+    "v1": {
+      "label": "V1 control (26 columns)",
+      "run_dir": "runs/v2_gate_v1",
+      "feature_set": "v1",
+      "interactions": false,
+      "dense_columns": 26,
+      "val_rmse": 1.1669575900311853,
+      "val_mae": 0.8899861135460081,
+      "train_rmse": 1.2056752155515087,
+      "epoch_seconds": 280.74,
+      "baseline_mean_rmse": 1.515108346939087,
+      "n_parameters": 61396898,
+      "rows": 286852
+    },
+    "v2_core": {
+      "label": "V2 core: 26 + 7 text-shape (33)",
+      "run_dir": "runs/v2_gate_core",
+      "feature_set": "v2",
+      "interactions": false,
+      "dense_columns": 33,
+      "val_rmse": 1.1670991668960105,
+      "val_mae": 0.8898365818784947,
+      "train_rmse": 1.2059217975910317,
+      "epoch_seconds": 279.17,
+      "baseline_mean_rmse": 1.515108346939087,
+      "n_parameters": 61397794,
+      "rows": 286852
+    },
+    "v2_interactions": {
+      "label": "V2 core + 4 interactions (37)",
+      "run_dir": "runs/v2_gate_inter",
+      "feature_set": "v2",
+      "interactions": true,
+      "dense_columns": 37,
+      "val_rmse": 1.1667747349162458,
+      "val_mae": 0.8917768759636583,
+      "train_rmse": 1.2056308283257045,
+      "epoch_seconds": 160.67,
+      "baseline_mean_rmse": 1.515108346939087,
+      "n_parameters": 61398306,
+      "rows": 286852
+    }
+  },
+  "comparisons": {
+    "v2_core_minus_v1": {
+      "delta_rmse": 0.00014157686482518805,
+      "delta_rmse_ci95": [
+        -0.00015383930842838845,
+        0.0004307274748687746
+      ],
+      "delta_rmse_ci_excludes_zero": false,
+      "delta_mae": -0.00014953166751341396,
+      "delta_mae_ci95": [
+        -0.00040227236410894375,
+        0.0001004729067900885
+      ],
+      "delta_mae_ci_excludes_zero": false,
+      "bootstrap_reps": 5000,
+      "bootstrap_seed": 42
+    },
+    "v2_interactions_minus_v1": {
+      "delta_rmse": -0.00018285511493942863,
+      "delta_rmse_ci95": [
+        -0.00047281093113317186,
+        0.00010439345008219081
+      ],
+      "delta_rmse_ci_excludes_zero": false,
+      "delta_mae": 0.0017907624176501935,
+      "delta_mae_ci95": [
+        0.0015439156001485627,
+        0.002034433969979235
+      ],
+      "delta_mae_ci_excludes_zero": true,
+      "bootstrap_reps": 5000,
+      "bootstrap_seed": 42
+    }
+  },
+  "decision": {
+    "adopted": false,
+    "threshold": -0.001,
+    "rule": "adopt only if delta_rmse <= -0.001 AND the paired 95% bootstrap CI excludes 0",
+    "reason": "neither arm reaches the threshold and no 95% CI excludes 0; the interaction arm also degrades MAE significantly (+0.00179, CI excludes 0)",
+    "consequence": "full 6.1M-row run and 3-model stack not executed (plan G2/G4); section 6 of task2_model/README.md is unchanged, 1.1543 stands"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "base": "/home/pklgames/coding/comp5434project/runs/v2_gate_v1/val_preds.npz",
+  "candidate": "/home/pklgames/coding/comp5434project/runs/v2_gate_core/val_preds.npz",
+  "rows": 286852,
+  "base_metrics": {
+    "rmse": 1.1669575900311853,
+    "mae": 0.8899861135460081
+  },
+  "candidate_metrics": {
+    "rmse": 1.1670991668960105,
+    "mae": 0.8898365818784947
+  },
+  "delta": {
+    "rmse": 0.00014157686482518805,
+    "mae": -0.00014953166751341396
+  },
+  "bootstrap": {
+    "delta_rmse": {
+      "point": 0.00014157686482518805,
+      "ci95_low": -0.00015383930842838845,
+      "ci95_high": 0.0004307274748687746,
+      "excludes_zero": false,
+      "std_error": 0.00014905865004559055,
+      "reps": 5000
+    },
+    "delta_mae": {
+      "point": -0.00014953166751341396,
+      "ci95_low": -0.00040227236410894375,
+      "ci95_high": 0.0001004729067900885,
+      "excludes_zero": false,
+      "std_error": 0.00012713822005469032,
+      "reps": 5000
+    }
+  },
+  "per_rating": {
+    "1": {
+      "rows": 42119,
+      "base_rmse": 1.9634470906782555,
+      "candidate_rmse": 1.9639076847932806,
+      "delta_rmse": 0.0004605941150250814
+    },
+    "2": {
+      "rows": 24936,
+      "base_rmse": 1.6464326203945419,
+      "candidate_rmse": 1.6473053791056576,
+      "delta_rmse": 0.0008727587111156954
+    },
+    "3": {
+      "rows": 27550,
+      "base_rmse": 1.0460034950540533,
+      "candidate_rmse": 1.0466605350572087,
+      "delta_rmse": 0.0006570400031553625
+    },
+    "4": {
+      "rows": 33164,
+      "base_rmse": 0.7946509972871524,
+      "candidate_rmse": 0.7950070710422339,
+      "delta_rmse": 0.0003560737550815096
+    },
+    "5": {
+      "rows": 159083,
+      "base_rmse": 0.8299459467452902,
+      "candidate_rmse": 0.8295302781507341,
+      "delta_rmse": -0.0004156685945561067
+    }
+  },
+  "decision": {
+    "threshold": -0.001,
+    "adopt": false,
+    "rule": "delta_rmse <= threshold AND the paired bootstrap 95% CI on delta_rmse excludes 0"
+  }
+}

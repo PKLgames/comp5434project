@@ -57,16 +57,88 @@ def forward_batch(model, batch, want_logits: bool = False):
 
 
 # ---------------------------------------------------------------------------
+def optimal_blend_alpha(pred: np.ndarray, exp: np.ndarray, y: np.ndarray) -> float:
+    """Closed-form least-squares weight for ``(1-a)*pred + a*exp``.
+
+    ``a`` minimises ``||(1-a)*pred + a*exp - y||^2``, i.e. it is the coefficient
+    of ``y - pred`` regressed on ``exp - pred``.  Clamped to ``[0, 1]`` so the
+    blend can only interpolate between the two estimators, never extrapolate.
+    """
+
+    delta = exp - pred
+    denominator = float(np.dot(delta, delta))
+    if denominator <= 1e-12:
+        return 0.0
+    alpha = float(np.dot(y - pred, delta)) / denominator
+    return float(np.clip(alpha, 0.0, 1.0))
+
+
+def blend_out_of_fold(pred: np.ndarray, exp: np.ndarray, y: np.ndarray,
+                      folds: int = 5) -> Tuple[Dict[str, float], list]:
+    """Out-of-fold blend of the regression head and ``E[rating]``.
+
+    The blend weight is fitted on the *other* folds and applied to the held-out
+    fold, so the reported RMSE is not the in-sample optimum.  With one parameter
+    over 1.5M rows the two differ by ~1e-6, but reporting the honest one costs
+    nothing because the optimum is closed-form.
+    """
+
+    n = y.size
+    oof = np.empty(n, dtype=np.float64)
+    bounds = np.linspace(0, n, folds + 1).astype(np.int64)
+    alphas = []
+    for k in range(folds):
+        lo, hi = int(bounds[k]), int(bounds[k + 1])
+        held = np.zeros(n, dtype=bool)
+        held[lo:hi] = True
+        alpha = optimal_blend_alpha(pred[~held], exp[~held], y[~held])
+        alphas.append(alpha)
+        oof[held] = (1.0 - alpha) * pred[held] + alpha * exp[held]
+    rmse = float(np.sqrt(np.mean((oof - y) ** 2)))
+    return ({"rmse_blend": rmse, "blend_alpha": float(np.mean(alphas))},
+            [float(a) for a in alphas])
+
+
+def resolve_selection_key(select_metric: str, mse_weight: float,
+                          has_ordinal: bool) -> str:
+    """Map ``--select-metric`` to the metrics key used for early stopping.
+
+    ``auto`` reproduces the historical rule exactly: the regression RMSE when
+    there is an MSE term, otherwise ``E[rating]`` (which is all a pure
+    classification model has).  ``exp`` and ``blend`` require an ordinal head.
+
+    Selecting on ``blend`` is the honest choice when the blend is what gets
+    submitted, but it reuses the validation split twice: once to fit the
+    out-of-fold blend weight and once to pick the epoch.  That is one extra
+    parameter over 1.5 M rows, so it is mild, but it is not free - say so when
+    reporting the number.
+    """
+
+    if select_metric == "auto":
+        return "rmse" if mse_weight > 0 else "rmse_exp"
+    key = {"rmse": "rmse", "exp": "rmse_exp", "blend": "rmse_blend"}.get(select_metric)
+    if key is None:
+        raise ValueError(f"unknown --select-metric: {select_metric!r}")
+    if key != "rmse" and not has_ordinal:
+        raise ValueError(
+            f"--select-metric {select_metric} needs an ordinal head "
+            f"(--ordinal-weight > 0)")
+    return key
+
+
+# ---------------------------------------------------------------------------
 @torch.no_grad()
 def evaluate(model, loader: ShardBatcher, device: torch.device,
-             max_batches: int | None = None) -> Tuple[Dict[str, float], np.ndarray, np.ndarray]:
+             max_batches: int | None = None,
+             blend_folds: int = 5) -> Tuple[Dict[str, float], np.ndarray, np.ndarray]:
     """Return RMSE/MAE metrics plus the concatenated predictions and labels.
 
     When the model has an auxiliary ordinal head we additionally report the
-    RMSE of ``E[rating] = sum_k k * p_k`` and of the best convex blend between
-    the regression output and that expectation.  The blend weight is selected
-    on the validation split (two parameters over 1.5M rows is negligible
-    overfitting; it is still reported for transparency).
+    RMSE of ``E[rating] = sum_k k * p_k`` and of the convex blend between the
+    regression output and that expectation.  The single blend weight is fitted
+    **out of fold** (5 contiguous folds over the validation rows), so the
+    reported ``rmse_blend`` is not the in-sample optimum; see
+    :func:`blend_out_of_fold`.
     """
 
     model.eval()
@@ -114,17 +186,16 @@ def evaluate(model, loader: ShardBatcher, device: torch.device,
     metrics = {"rmse": rmse, "mae": mae, "count": int(count),
                "per_rating_rmse": per_rating}
 
-    if exps:
-        exp = np.concatenate(exps)
+    exp = np.concatenate(exps) if exps else None
+    if exp is not None:
         metrics["rmse_exp"] = float(np.sqrt(np.mean((exp - labels) ** 2)))
-        best = (float("inf"), 0.0)
-        for alpha in np.linspace(0.0, 1.0, 21):
-            blended = (1.0 - alpha) * preds + alpha * exp
-            score = float(np.sqrt(np.mean((blended - labels) ** 2)))
-            if score < best[0]:
-                best = (score, float(alpha))
-        metrics["rmse_blend"], metrics["blend_alpha"] = best
-    return metrics, preds, labels
+        blend, alphas = blend_out_of_fold(preds.astype(np.float64),
+                                          exp.astype(np.float64),
+                                          labels.astype(np.float64),
+                                          folds=max(2, blend_folds))
+        metrics.update(blend)
+        metrics["blend_alphas_per_fold"] = alphas
+    return metrics, preds, labels, exp
 
 
 # ---------------------------------------------------------------------------
@@ -153,8 +224,30 @@ def main() -> None:
                         help="disable the linear (wide) TF-IDF path")
     parser.add_argument("--text-mlp", action="store_true",
                         help="add a non-linear fusion layer over the text towers")
+    parser.add_argument("--film", action="store_true",
+                        help="let the numeric features modulate the text towers "
+                             "(FiLM: h' = h*(1+gamma)+beta). Zero-initialised, so "
+                             "it starts as an exact identity and only adds capacity")
+    parser.add_argument("--blend-folds", type=int, default=5,
+                        help="folds used to fit the ordinal E[rating] blend weight")
+    parser.add_argument("--select-metric", default="auto",
+                        choices=["auto", "rmse", "exp", "blend"],
+                        help="metric for early stopping / best-checkpoint selection. "
+                             "auto reproduces the historical rule (regression RMSE, or "
+                             "E[rating] when --mse-weight is 0). 'blend' selects on "
+                             "what you would actually submit; it needs an ordinal head")
     parser.add_argument("--dense-mode", default="all",
-                        choices=["all", "numeric", "entity", "none"])
+                        choices=["all", "numeric", "entity", "text_shape",
+                                 "interactions", "none"])
+    parser.add_argument("--feature-set", default=None, choices=["v1", "v2"],
+                        help="override the feature set declared by meta.json "
+                             "(default: take it from the cache)")
+    parser.add_argument("--interactions", dest="interactions",
+                        action="store_true", default=None,
+                        help="force-enable the V2 interaction block")
+    parser.add_argument("--no-interactions", dest="interactions",
+                        action="store_false",
+                        help="force-disable the V2 interaction block")
     parser.add_argument("--device", default="auto")
     parser.add_argument("--amp", action="store_true", help="mixed precision on CUDA")
     parser.add_argument("--seed", type=int, default=42)
@@ -168,7 +261,6 @@ def main() -> None:
     args = parser.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
-    save_json(vars(args), os.path.join(args.out, "args.json"))
 
     torch.set_num_threads(max(1, min(args.num_threads, os.cpu_count() or 1)))
     set_seed(args.seed)
@@ -176,20 +268,40 @@ def main() -> None:
     print(f"device={device} threads={torch.get_num_threads()}", flush=True)
 
     meta = load_json(os.path.join(args.data, "meta.json"))
-    dense_columns = select_dense_columns(args.dense_mode)
+    v2_info = meta.get("v2") or {}
+    feature_set = args.feature_set or str(
+        meta.get("feature_set", v2_info.get("feature_set", "v1")))
+    interactions = (bool(meta.get("interactions", v2_info.get("interactions", False)))
+                    if args.interactions is None else bool(args.interactions))
+    args.feature_set = feature_set
+    args.interactions = interactions
+    dense_columns = select_dense_columns(args.dense_mode, feature_set, interactions)
+    print(f"feature_set={feature_set} interactions={interactions} "
+          f"dense={len(dense_columns)} columns", flush=True)
     use_title, use_comment = text_flags(args.text_mode)
     if not dense_columns and not use_title and not use_comment:
         raise SystemExit("at least one feature group must be enabled")
 
+    try:
+        selection_key = resolve_selection_key(
+            args.select_metric, args.mse_weight, args.ordinal_weight > 0)
+    except ValueError as exc:
+        raise SystemExit(str(exc))
+    print(f"selecting the best epoch on {selection_key}", flush=True)
+
+    # Written after resolution so the file records the feature set actually used
+    # (``--feature-set``/``--interactions`` default to the cache's declaration).
+    save_json(vars(args), os.path.join(args.out, "args.json"))
+
     train_loader = ShardBatcher(
         args.data, "train", dense_columns, batch_size=args.batch_size,
         shuffle=True, seed=args.seed, max_shards=args.limit_train_shards,
-        max_rows=args.limit_train_rows,
+        max_rows=args.limit_train_rows, pin_memory=torch.cuda.is_available(),
     )
     valid_loader = ShardBatcher(
         args.data, "valid", dense_columns, batch_size=args.valid_batch_size,
         shuffle=False, seed=args.seed, max_shards=args.limit_valid_shards,
-        max_rows=args.limit_valid_rows,
+        max_rows=args.limit_valid_rows, pin_memory=torch.cuda.is_available(),
     )
     print(f"train rows={train_loader.num_rows:,} batches={len(train_loader):,}; "
           f"valid rows={valid_loader.num_rows:,}", flush=True)
@@ -208,6 +320,7 @@ def main() -> None:
         use_wide=args.use_wide,
         ordinal=args.ordinal_weight > 0,
         text_mlp=args.text_mlp,
+        film=args.film,
         init_rating=float(meta.get("train_rating_mean", 3.8)),
     ).to(device)
     n_params = sum(p.numel() for p in model.parameters())
@@ -271,7 +384,8 @@ def main() -> None:
                       f"train_rmse={np.sqrt(running_sq / running_n):.4f}", flush=True)
 
         train_rmse = float(np.sqrt(running_sq / max(running_n, 1)))
-        metrics, preds, labels = evaluate(model, valid_loader, device)
+        metrics, preds, labels, exp = evaluate(model, valid_loader, device,
+                                               blend_folds=args.blend_folds)
         if np.isnan(baseline_rmse) and labels.size:
             baseline_rmse = float(np.sqrt(np.mean((labels - mean_rating) ** 2)))
         elapsed = time.time() - epoch_started
@@ -292,10 +406,7 @@ def main() -> None:
               f"val_rmse={metrics['rmse']:.4f} val_mae={metrics['mae']:.4f} "
               f"({elapsed:.1f}s){extra}", flush=True)
 
-        if args.mse_weight > 0:
-            selection_score = metrics["rmse"]
-        else:
-            selection_score = metrics["rmse_exp"]
+        selection_score = metrics[selection_key]
 
         if selection_score < best_rmse - 1e-5:
             best_rmse = selection_score
@@ -305,15 +416,27 @@ def main() -> None:
                 "model_state": best_state,
                 "args": vars(args),
                 "dense_columns": dense_columns,
+                # Additive key: every V1 checkpoint predates it and simply does
+                # not carry it, while predict.py can now refuse a checkpoint that
+                # was trained with a different dense schema.
+                "dense_schema": {"feature_set": feature_set,
+                                 "interactions": interactions,
+                                 "columns": dense_columns},
                 "text_mode": args.text_mode,
                 "vocab_title": train_loader.vocab_title,
                 "vocab_comment": train_loader.vocab_comment,
+                # Out-of-fold ordinal blend weight of this epoch, so that
+                # ``predict.py --blend-alpha auto`` reproduces exactly what was
+                # measured here.  ``None`` for a regression-only model.
+                "blend_alpha": metrics.get("blend_alpha"),
                 "val_rmse": best_rmse,
                 "epoch": epoch,
             }, os.path.join(args.out, "best.pt"))
             if args.save_val_preds:
-                np.savez(os.path.join(args.out, "val_preds.npz"),
-                         y=labels, pred=preds)
+                payload = {"y": labels, "pred": preds}
+                if exp is not None:
+                    payload["exp"] = exp.astype(np.float32)
+                np.savez(os.path.join(args.out, "val_preds.npz"), **payload)
         elif epoch - best_epoch >= args.patience:
             print(f"early stopping at epoch {epoch}", flush=True)
             break
@@ -321,6 +444,7 @@ def main() -> None:
     total_seconds = time.time() - started
     summary = {
         "best_epoch": best_epoch,
+        "selection_metric": selection_key,
         "best_val_rmse": best_rmse,
         "baseline_mean_rmse": baseline_rmse,
         "improvement_vs_mean": baseline_rmse - best_rmse,

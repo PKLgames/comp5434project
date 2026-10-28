@@ -1,4 +1,17 @@
 # ---------------------------------------------------------------------------
+# Windows / macOS filesystem metadata
+# Every file in this repo was transferred from a Windows machine and arrived
+# with an NTFS "Zone.Identifier" alternate-data-stream sidecar named
+# "<original file>:Zone.Identifier".  They carry no project information.
+# ---------------------------------------------------------------------------
+*:Zone.Identifier
+*:Zone.Identifier:*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# ---------------------------------------------------------------------------
 # Local environment / package installation (not project source)
 # ---------------------------------------------------------------------------
 .pylibs/
@@ -11,6 +24,11 @@ __pycache__/
 # Generated caches (regenerable with preprocess.py in ~1 minute)
 # ---------------------------------------------------------------------------
 artifacts/
+# V2 overlay (meta.json + stats.json, a few KB).  Excluded for the same reason
+# as artifacts/: it only describes a cache that is itself not committed, and
+# `preprocess.py --feature-set v2 --reuse artifacts --out artifacts_v2`
+# rebuilds it in about 20 s.
+artifacts_v2/
 
 # ---------------------------------------------------------------------------
 # Files larger than 100 MB -> excluded from Git

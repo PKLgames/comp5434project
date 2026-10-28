@@ -16,11 +16,18 @@ import numpy as np
 import torch
 from scipy.sparse import csr_matrix
 
-from common import DENSE_COLS, load_json
+from common import DENSE_COLS, dense_schema, load_json
+from features_v2 import build_matrix
 
 
 class ShardBatcher:
-    """Iterate mini-batches of one split stored as ``.npz`` CSR shards."""
+    """Iterate mini-batches of one split stored as ``.npz`` CSR shards.
+
+    A V2 cache is an *overlay*: ``<artifacts>/meta.json`` describes the extended
+    schema and points at a read-only V1 cache through ``base_dir``.  The shards
+    stay V1 (26 dense columns); the V2 columns are recomputed from the CSR arrays
+    of each shard on the fly, so no second 2.3 GB cache is ever written.
+    """
 
     def __init__(
         self,
@@ -46,11 +53,49 @@ class ShardBatcher:
         self.vocab_title = int(meta["vocab"]["title_tfidf"])
         self.vocab_comment = int(meta["vocab"]["comment_tfidf"])
 
+        # --- V1 / V2 overlay resolution --------------------------------
+        # ``meta["dense_columns"]`` is authoritative (V1 caches already contain
+        # exactly the same list as ``common.DENSE_COLS``), which lets an overlay
+        # describe itself instead of relying on an import.
+        self.schema = [str(name) for name in meta["dense_columns"]]
+        v2_info = meta.get("v2") or {}
+        self.feature_set = str(meta.get("feature_set", v2_info.get("feature_set", "v1")))
+        # Whether the cache was built *with* the interaction block.  This is a
+        # property of the cache (its statistics cover those columns), not of the
+        # current run: a run may select a subset of the schema, e.g. the 33
+        # text-shape columns out of a 37-column overlay.
+        self.schema_interactions = bool(
+            meta.get("interactions", v2_info.get("interactions", False)))
+        expected = dense_schema(self.feature_set, self.schema_interactions)
+        if self.schema != expected:
+            raise ValueError(
+                f"meta.json declares {len(self.schema)} dense columns but "
+                f"feature_set={self.feature_set!r} "
+                f"(interactions={self.schema_interactions}) has {len(expected)}; "
+                f"rebuild the cache with preprocess.py"
+            )
+
+        base_dir = meta.get("base_dir")
+        if base_dir:
+            self.base_dir = (base_dir if os.path.isabs(base_dir)
+                             else os.path.normpath(os.path.join(artifacts, base_dir)))
+        else:
+            self.base_dir = artifacts
+        self.is_v2 = self.feature_set == "v2"
+        # Wide of the raw ``dense`` array stored in the underlying shards.
+        self.base_width = len(meta.get("base_dense_columns") or DENSE_COLS)
+
+        if self.is_v2:
+            self.t_map = np.load(os.path.join(self.base_dir, "vocab_title.npy"))
+            self.c_map = np.load(os.path.join(self.base_dir, "vocab_comment.npy"))
+        else:
+            self.t_map = self.c_map = None
+
         shards = split_info["shards"]
         if max_shards:
             shards = shards[:max_shards]
         self.shards = shards
-        self.shard_dir = os.path.join(artifacts, split)
+        self.shard_dir = os.path.join(self.base_dir, split)
 
         total = sum(s["rows"] for s in shards)
         if max_rows:
@@ -58,10 +103,25 @@ class ShardBatcher:
         self.num_rows = total
 
         # Dense column selection and train-fitted standardisation parameters.
-        self.dense_index = np.array([DENSE_COLS.index(c) for c in dense_columns], dtype=np.int64)
+        # The statistics are fitted on the *whole* schema, so the index array is
+        # resolved against it and must agree in length (guards the classic bug of
+        # standardising V2 columns with V1 statistics).
+        self.dense_index_names = [str(c) for c in dense_columns]
+        missing = [c for c in self.dense_index_names if c not in self.schema]
+        if missing:
+            raise ValueError(
+                f"{artifacts}/meta.json does not provide the dense column(s) "
+                f"{missing}; build a V2 cache with preprocess.py --feature-set v2")
+        self.dense_index = np.array([self.schema.index(c) for c in self.dense_index_names],
+                                    dtype=np.int64)
         stats = meta["dense_stats"]
         mean = np.asarray(stats["mean"], dtype=np.float32)
         std = np.asarray(stats["std"], dtype=np.float32)
+        if mean.size != len(self.schema) or std.size != len(self.schema):
+            raise ValueError(
+                f"dense_stats has {mean.size} mean / {std.size} std values but the "
+                f"schema has {len(self.schema)} columns; rebuild the cache"
+            )
         self.dense_mean = mean[self.dense_index] if self.dense_index.size else mean[:0]
         self.dense_std = std[self.dense_index] if self.dense_index.size else std[:0]
         self.has_dense = bool(self.dense_index.size)
@@ -111,6 +171,22 @@ class ShardBatcher:
                 y = y[perm]
 
         if self.has_dense:
+            if self.is_v2:
+                # Zero-copy overlay: recompute the V2 columns from this shard's
+                # CSR arrays and append them *before* standardisation, so one
+                # mean/std vector covers the whole schema.
+                dense = build_matrix(
+                    dense, t_indptr, t_indices, t_data,
+                    c_indptr, c_indices, c_data,
+                    self.t_map, self.c_map, self.schema_interactions)
+                if dense.shape[1] != len(self.schema):
+                    raise ValueError(
+                        f"V2 overlay produced {dense.shape[1]} dense columns but "
+                        f"meta.json declares {len(self.schema)}")
+            elif dense.shape[1] != self.base_width:
+                raise ValueError(
+                    f"shard holds {dense.shape[1]} dense columns, expected "
+                    f"{self.base_width}")
             dense = dense[:, self.dense_index]
             dense = (dense - self.dense_mean) / self.dense_std
             dense = np.clip(dense, -5.0, 5.0).astype(np.float32, copy=False)

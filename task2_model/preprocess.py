@@ -25,9 +25,13 @@ Output layout
 Usage
 -----
 # Build train/valid caches (run once, ~2-3 minutes for the full data)
-python preprocess.py --train-dir ../Task2_Token_Dataset/新token化/train_features_with_entity \
-                     --valid-dir ../Task2_Token_Dataset/新token化/validation_features_with_entity \
+python preprocess.py --train-dir ../Task2_Token_Dataset/tokenized/train_features_with_entity \
+                     --valid-dir ../Task2_Token_Dataset/tokenized/validation_features_with_entity \
                      --out ../artifacts
+
+# Build the V2 overlay on top of an existing (read-only) V1 cache.  This writes
+# only meta.json + stats.json (a few KB); the 2.3 GB of shards is reused as is.
+python preprocess.py --feature-set v2 --reuse ../artifacts --out ../artifacts_v2
 
 # Later, when Part A delivers the test features, reuse the saved vocabulary:
 python preprocess.py --test-dir <test_features_dir> --reuse ../artifacts --out ../artifacts
@@ -37,6 +41,7 @@ from __future__ import annotations
 
 import argparse
 import glob
+import hashlib
 import os
 import time
 from typing import Dict, List, Optional, Tuple
@@ -49,9 +54,11 @@ from common import (
     FEATURE_GROUPS,
     TARGET_COL,
     build_dense_matrix,
+    dense_schema,
     load_json,
     save_json,
 )
+from features_v2 import build_matrix
 
 
 # ---------------------------------------------------------------------------
@@ -225,6 +232,168 @@ def process_split(
 
 
 # ---------------------------------------------------------------------------
+# V2 overlay
+# ---------------------------------------------------------------------------
+def base_fingerprint(base: str) -> str:
+    """Cheap, stable fingerprint of the underlying V1 cache.
+
+    Hashing the 2.3 GB of shards on every build would be wasteful and the
+    overlay is reproducible anyway, so this digests the artifacts that pin the
+    data down: the V1 meta (column list + row counts + dense statistics), both
+    manifests (shard names and per-shard row counts) and the two vocabularies.
+    If Part A ever delivers genuinely different features, this changes.
+    """
+
+    digest = hashlib.sha256()
+    parts = [
+        os.path.join(base, "meta.json"),
+        os.path.join(base, "train", "manifest.json"),
+        os.path.join(base, "valid", "manifest.json"),
+        os.path.join(base, "vocab_title.npy"),
+        os.path.join(base, "vocab_comment.npy"),
+    ]
+    for path in parts:
+        digest.update(os.path.basename(path).encode("utf-8"))
+        if not os.path.exists(path):
+            digest.update(b"<missing>")
+            continue
+        with open(path, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                digest.update(chunk)
+    return digest.hexdigest()
+
+
+def build_v2_overlay(args: argparse.Namespace) -> None:
+    """Write ``meta.json`` + ``stats.json`` for a V2 overlay over a V1 cache."""
+
+    if not args.reuse:
+        raise SystemExit(
+            "--feature-set v2 requires --reuse <v1 artifact dir>: the overlay "
+            "reads the existing shards and never writes them")
+    base = os.path.abspath(args.reuse)
+    out = os.path.abspath(args.out)
+    if os.path.normpath(base) == os.path.normpath(out):
+        raise SystemExit(
+            "--out must differ from --reuse: V2 never modifies the V1 cache")
+
+    base_meta = load_json(os.path.join(base, "meta.json"))
+    if list(base_meta["dense_columns"]) != list(DENSE_COLS):
+        raise SystemExit(
+            f"{base}/meta.json does not describe a V1 (26-column) cache; "
+            "point --reuse at the original artifacts directory")
+
+    interactions = bool(args.interactions)
+    columns = dense_schema("v2", interactions)
+    v2_columns = columns[len(DENSE_COLS):]
+    shape_cols = [c for c in v2_columns if c in FEATURE_GROUPS["text_shape"]]
+    inter_cols = [c for c in v2_columns if c in FEATURE_GROUPS["interactions"]]
+    print(f"[v2] base={base}")
+    print(f"[v2] out={out}  columns={len(columns)} "
+          f"(26 v1 + {len(v2_columns)} v2, interactions={interactions})")
+
+    t_map = np.load(os.path.join(base, "vocab_title.npy"))
+    c_map = np.load(os.path.join(base, "vocab_comment.npy"))
+
+    shards = list(base_meta["splits"]["train"]["shards"])
+    if args.limit_train:
+        shards = shards[: args.limit_train]
+
+    n_cols = len(columns)
+    total = np.zeros(n_cols, dtype=np.float64)
+    total_sq = np.zeros(n_cols, dtype=np.float64)
+    n_rows = 0
+    started = time.time()
+    print(f"[v2] fitting mean/std on {len(shards)} training shards ...", flush=True)
+
+    for i, shard in enumerate(shards):
+        with np.load(os.path.join(base, "train", shard["file"])) as npz:
+            dense = npz["dense"]
+            t_indptr, t_indices, t_data = npz["t_indptr"], npz["t_indices"], npz["t_data"]
+            c_indptr, c_indices, c_data = npz["c_indptr"], npz["c_indices"], npz["c_data"]
+        raw = build_matrix(dense, t_indptr, t_indices, t_data,
+                           c_indptr, c_indices, c_data,
+                           t_map, c_map, interactions)
+        if raw.shape != (dense.shape[0], n_cols):
+            raise SystemExit(f"unexpected V2 block shape {raw.shape} for {shard['file']}")
+
+        # Identical accumulation to the V1 path, so the first 26 statistics come
+        # out bit-for-bit equal to the ones already stored in the V1 meta.
+        total += raw.sum(axis=0, dtype=np.float64)
+        total_sq += np.square(raw, dtype=np.float64).sum(axis=0)
+        n_rows += raw.shape[0]
+
+        if (i + 1) % 8 == 0 or i + 1 == len(shards):
+            print(f"  {i + 1}/{len(shards)} shards, {n_rows:,} rows, "
+                  f"{time.time() - started:.1f}s", flush=True)
+
+    if not n_rows:
+        raise SystemExit("no training rows; nothing to fit")
+
+    mean = total / n_rows
+    var = np.maximum(total_sq / n_rows - mean * mean, 0.0)
+    std = np.sqrt(var)
+    std = np.where(std < 1e-6, 1.0, std)
+
+    # The first 26 statistics must reproduce the V1 ones exactly; a mismatch
+    # would mean the overlay standardises V1 columns differently from the model
+    # that produced the published numbers.
+    base_mean = np.asarray(base_meta["dense_stats"]["mean"], dtype=np.float64)
+    base_std = np.asarray(base_meta["dense_stats"]["std"], dtype=np.float64)
+    drift_mean = float(np.max(np.abs(mean[: len(DENSE_COLS)] - base_mean))) if base_mean.size else 0.0
+    drift_std = float(np.max(np.abs(std[: len(DENSE_COLS)] - base_std))) if base_std.size else 0.0
+    print(f"[v2] v1-statistic drift: max|dmean|={drift_mean:.3e} "
+          f"max|dstd|={drift_std:.3e}")
+
+    stats = {"rows": int(n_rows), "mean": mean.tolist(), "std": std.tolist()}
+
+    fingerprint = base_fingerprint(base)
+    rel_base = os.path.relpath(base, out)
+
+    meta = {
+        "version": 2,
+        "feature_set": "v2",
+        "interactions": interactions,
+        # Relative when possible so the overlay survives moving the repository.
+        "base_dir": rel_base,
+        "dense_columns": columns,
+        "base_dense_columns": list(DENSE_COLS),
+        "feature_groups": FEATURE_GROUPS,
+        "target": TARGET_COL,
+        "vocab": base_meta["vocab"],
+        "splits": base_meta["splits"],
+        "dense_stats": stats,
+        "train_rating_distribution": base_meta.get("train_rating_distribution", []),
+        "train_rating_mean": base_meta.get("train_rating_mean", 0.0),
+        "source": {
+            "base": base,
+            "base_source": base_meta.get("source", {}),
+            "note": "V2 overlay: shards are read from base_dir, only the schema "
+                    "and standardisation statistics are new",
+        },
+        "v2": {
+            "feature_set": "v2",
+            "interactions": interactions,
+            "columns": shape_cols,
+            "text_shape_columns": shape_cols,
+            "interaction_columns": inter_cols,
+            "fit_split": "train",
+            "base_fingerprint": fingerprint,
+            "v1_stat_drift": {"max_abs_dmean": drift_mean, "max_abs_dstd": drift_std},
+        },
+    }
+
+    os.makedirs(out, exist_ok=True)
+    save_json(stats, os.path.join(out, "stats.json"))
+    save_json(meta, os.path.join(out, "meta.json"))
+
+    print("[v2] fitted statistics:")
+    for name, mu, sd in zip(columns[len(DENSE_COLS):], mean[len(DENSE_COLS):], std[len(DENSE_COLS):]):
+        print(f"    {name:<24} mean={mu:10.4f} std={sd:10.4f}")
+    print(f"[v2] wrote {out}/meta.json and stats.json "
+          f"({os.path.getsize(os.path.join(out, 'meta.json')) / 1024:.1f} KB)")
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 def main() -> None:
@@ -239,10 +408,27 @@ def main() -> None:
                         help="debug: only convert the first N train shards")
     parser.add_argument("--limit-valid", type=int, default=None,
                         help="debug: only convert the first N validation shards")
+    parser.add_argument("--feature-set", default="v1", choices=["v1", "v2"],
+                        help="v1 (default) writes the 26-column cache; v2 writes a "
+                             "lightweight overlay over an existing --reuse cache")
+    parser.add_argument("--interactions", dest="interactions", action="store_true",
+                        default=True,
+                        help="v2: also fit the 4 interaction columns (default: on, so "
+                             "one overlay serves both the core and the +interactions "
+                             "ablation; a run selects the subset it wants)")
+    parser.add_argument("--no-interactions", dest="interactions", action="store_false",
+                        help="v2: fit only the 7 text-shape columns")
     args = parser.parse_args()
 
     out = os.path.abspath(args.out)
     os.makedirs(out, exist_ok=True)
+
+    # ------------------------------------------------------------------
+    # V2 overlay: no parquet is read and no shard is written.
+    # ------------------------------------------------------------------
+    if args.feature_set == "v2":
+        build_v2_overlay(args)
+        return
 
     # ------------------------------------------------------------------
     # Test-only mode: reuse an existing vocabulary and statistics.

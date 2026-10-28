@@ -1,0 +1,3 @@
+# Extra dependencies for running the test suite only.
+# The pipeline itself needs nothing beyond requirements.txt.
+pytest>=8.0
