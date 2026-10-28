@@ -1,0 +1,14 @@
+* text=auto
+
+# Git LFS patterns for large binary files.
+#
+# At repository setup time no file in the 50-100 MB range exists; these
+# patterns future-proof the repository so that a new parquet/npz/checkpoint
+# file in that range is stored through Git LFS instead of bloating history.
+# Remove a line if that file type should be committed as a normal object.
+*.parquet filter=lfs diff=lfs merge=lfs -text
+*.npz     filter=lfs diff=lfs merge=lfs -text
+*.pt      filter=lfs diff=lfs merge=lfs -text
+*.pth     filter=lfs diff=lfs merge=lfs -text
+*.zip     filter=lfs diff=lfs merge=lfs -text
+*.7z      filter=lfs diff=lfs merge=lfs -text

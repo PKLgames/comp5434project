@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------------
+# Local environment / package installation (not project source)
+# ---------------------------------------------------------------------------
+.pylibs/
+.venv/
+.tmp/
+__pycache__/
+*.py[cod]
+
+# ---------------------------------------------------------------------------
+# Generated caches (regenerable with preprocess.py in ~1 minute)
+# ---------------------------------------------------------------------------
+artifacts/
+
+# ---------------------------------------------------------------------------
+# Files larger than 100 MB -> excluded from Git
+#   .pylibs/torch/lib/torch_cpu.dll                     250.5 MB
+#   runs/full3/best.pt                                  234.2 MB
+#   runs/full_tmlp/best.pt                              234.5 MB
+#   runs/ablate_all/best.pt                             234.2 MB
+#   runs/ablate_none/best.pt                            234.0 MB
+#   runs/ablate_numeric/best.pt                         234.2 MB
+# ---------------------------------------------------------------------------
+runs/**/*.pt
+runs/**/*.pth
+
+# Derived prediction tensors (small, but reproducible from checkpoints)
+runs/**/*.npz
+
+# ---------------------------------------------------------------------------
+# Handover data: the parquet shards total 2.16 GB.
+# Keep the small JSON summaries, ignore the large Spark output directories.
+# ---------------------------------------------------------------------------
+Task2_OriginData/output/*
+!Task2_OriginData/output/*.json
+
+# ---------------------------------------------------------------------------
+# Generic large archives (also catches future data drops)
+# ---------------------------------------------------------------------------
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz

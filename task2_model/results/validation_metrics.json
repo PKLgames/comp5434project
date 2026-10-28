@@ -1,0 +1,95 @@
+{
+  "nn_base": {
+    "best_epoch": 2,
+    "val_rmse": 1.1573119982743172,
+    "val_mae": 0.8645817539815394,
+    "baseline_mean_rmse": 1.5148791074752808,
+    "n_parameters": 61396898,
+    "total_seconds": 1474.7,
+    "epoch_seconds": [
+      485.24,
+      513.14,
+      475.22
+    ]
+  },
+  "nn_textmlp": {
+    "best_epoch": 2,
+    "val_rmse": 1.1571832951667043,
+    "val_mae": 0.8681455092355643,
+    "baseline_mean_rmse": 1.5148791074752808,
+    "n_parameters": 61462690,
+    "total_seconds": 1045.84,
+    "epoch_seconds": [
+      561.31,
+      483.36
+    ]
+  },
+  "ensemble_equal": {
+    "rmse": 1.1550233364105225,
+    "mae": 0.8652934432029724,
+    "rows": 1526196
+  },
+  "ensemble_stack_oof": {
+    "rmse": 1.1542624960983554,
+    "weights": [
+      0.47725399,
+      0.48444617
+    ],
+    "intercept": 0.16193599,
+    "folds": 5
+  },
+  "per_rating_stack": {
+    "1": {
+      "count": 224366,
+      "rmse": 1.9615075221430467,
+      "bias": 1.5959856192573412,
+      "pred_mean": 2.595985619257341
+    },
+    "2": {
+      "count": 131896,
+      "rmse": 1.6574000607695178,
+      "bias": 1.2467966416671392,
+      "pred_mean": 3.246796641667139
+    },
+    "3": {
+      "count": 147756,
+      "rmse": 1.042699529239941,
+      "bias": 0.4386452931369492,
+      "pred_mean": 3.438645293136949
+    },
+    "4": {
+      "count": 176874,
+      "rmse": 0.7845828058990432,
+      "bias": -0.12399377342544914,
+      "pred_mean": 3.876006226574551
+    },
+    "5": {
+      "count": 845304,
+      "rmse": 0.7979963227885413,
+      "bias": -0.6688880465067517,
+      "pred_mean": 4.331111953493248
+    }
+  },
+  "ablation_subset": {
+    "none": {
+      "val_rmse": 1.1689323340855537,
+      "train_rows": 1524869,
+      "epochs": 1
+    },
+    "numeric": {
+      "val_rmse": 1.166822219056097,
+      "train_rows": 1524869,
+      "epochs": 1
+    },
+    "all": {
+      "val_rmse": 1.1666140131608609,
+      "train_rows": 1524869,
+      "epochs": 1
+    }
+  },
+  "linear_ridge_subset": {
+    "val_rmse": 1.2333,
+    "train_rows": 1524869,
+    "alpha": 0.01
+  }
+}

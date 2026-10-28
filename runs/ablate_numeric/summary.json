@@ -1,0 +1,52 @@
+{
+  "best_epoch": 1,
+  "best_val_rmse": 1.166822219056097,
+  "baseline_mean_rmse": 1.515108346939087,
+  "improvement_vs_mean": 0.34828612788298985,
+  "total_seconds": 107.99,
+  "history": [
+    {
+      "epoch": 1,
+      "train_rmse": 1.2060439936483947,
+      "val_rmse": 1.166822219056097,
+      "val_mae": 0.8930195785577144,
+      "seconds": 107.52,
+      "lr": 6.2473956798181896e-06
+    }
+  ],
+  "n_parameters": 61395746,
+  "device": "cpu",
+  "torch": "2.9.1+cpu",
+  "cuda_device": null,
+  "threads": 16,
+  "config": {
+    "data": "C:\\coding\\comp5434project\\artifacts",
+    "out": "C:\\coding\\comp5434project\\runs\\ablate_numeric",
+    "epochs": 1,
+    "batch_size": 8192,
+    "valid_batch_size": 8192,
+    "lr": 0.003,
+    "weight_decay": 0.0001,
+    "text_dim": 256,
+    "dense_dim": 128,
+    "hidden_dim": 256,
+    "dropout": 0.15,
+    "emb_dropout": 0.1,
+    "ordinal_weight": 0.0,
+    "mse_weight": 1.0,
+    "text_mode": "both",
+    "use_wide": true,
+    "text_mlp": false,
+    "dense_mode": "numeric",
+    "device": "auto",
+    "amp": false,
+    "seed": 42,
+    "num_threads": 16,
+    "patience": 2,
+    "limit_train_shards": 16,
+    "limit_valid_shards": 2,
+    "limit_train_rows": null,
+    "limit_valid_rows": null,
+    "save_val_preds": false
+  }
+}

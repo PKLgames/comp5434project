@@ -1,0 +1,25 @@
+{
+  "original_rows": 7684645,
+  "conflicting_records_removed": 28518,
+  "identical_duplicates_removed": 25157,
+  "total_removed": 53675,
+  "remaining_rows": 7630970,
+  "remaining_missing_comment_flags": 8955,
+  "remaining_invalid_votes_flags": 1,
+  "invalid_rows_after_cleaning": 0,
+  "total_seconds_including_validation": 126.71,
+  "spark_version": "4.0.1",
+  "master": "local[4]",
+  "input_fields_for_duplicate_detection": [
+    "title",
+    "comment",
+    "user_id",
+    "prod_id",
+    "parent_prod_id",
+    "time",
+    "votes",
+    "purchased"
+  ],
+  "output": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\clean_train_latest",
+  "removed_records": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\train_removed_latest"
+}

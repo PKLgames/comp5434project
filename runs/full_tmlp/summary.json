@@ -1,0 +1,60 @@
+{
+  "best_epoch": 2,
+  "best_val_rmse": 1.1571832951667043,
+  "baseline_mean_rmse": 1.5148791074752808,
+  "improvement_vs_mean": 0.3576958123085765,
+  "total_seconds": 1045.84,
+  "history": [
+    {
+      "epoch": 1,
+      "train_rmse": 1.1844352285573463,
+      "val_rmse": 1.157456872967682,
+      "val_mae": 0.8757154812354437,
+      "seconds": 561.31,
+      "lr": 0.0017596003095403788
+    },
+    {
+      "epoch": 2,
+      "train_rmse": 1.1377167590040496,
+      "val_rmse": 1.1571832951667043,
+      "val_mae": 0.8681455092355643,
+      "seconds": 483.36,
+      "lr": 6.003865662309187e-06
+    }
+  ],
+  "n_parameters": 61462690,
+  "device": "cpu",
+  "torch": "2.9.1+cpu",
+  "cuda_device": null,
+  "threads": 16,
+  "config": {
+    "data": "C:\\coding\\comp5434project\\artifacts",
+    "out": "C:\\coding\\comp5434project\\runs\\full_tmlp",
+    "epochs": 2,
+    "batch_size": 8192,
+    "valid_batch_size": 8192,
+    "lr": 0.003,
+    "weight_decay": 0.0001,
+    "text_dim": 256,
+    "dense_dim": 128,
+    "hidden_dim": 256,
+    "dropout": 0.15,
+    "emb_dropout": 0.1,
+    "ordinal_weight": 0.0,
+    "mse_weight": 1.0,
+    "text_mode": "both",
+    "use_wide": true,
+    "text_mlp": true,
+    "dense_mode": "all",
+    "device": "auto",
+    "amp": false,
+    "seed": 42,
+    "num_threads": 16,
+    "patience": 2,
+    "limit_train_shards": null,
+    "limit_valid_shards": null,
+    "limit_train_rows": null,
+    "limit_valid_rows": null,
+    "save_val_preds": false
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "best_epoch": 2,
+  "best_val_rmse": 1.1573119982743172,
+  "baseline_mean_rmse": 1.5148791074752808,
+  "improvement_vs_mean": 0.3575671092009636,
+  "total_seconds": 1474.7,
+  "history": [
+    {
+      "epoch": 1,
+      "train_rmse": 1.18598195756372,
+      "val_rmse": 1.1585284793697295,
+      "val_mae": 0.8899809205665078,
+      "seconds": 485.24,
+      "lr": 0.002528652856267083
+    },
+    {
+      "epoch": 2,
+      "train_rmse": 1.14251739318035,
+      "val_rmse": 1.1573119982743172,
+      "val_mae": 0.8645817539815394,
+      "seconds": 513.14,
+      "lr": 0.0009079867399515544
+    },
+    {
+      "epoch": 3,
+      "train_rmse": 1.1163034745339835,
+      "val_rmse": 1.1631839989152901,
+      "val_mae": 0.868593785998919,
+      "seconds": 475.22,
+      "lr": 6.001718072548098e-06
+    }
+  ],
+  "n_parameters": 61396898,
+  "device": "cpu",
+  "torch": "2.9.1+cpu",
+  "cuda_device": null,
+  "threads": 16,
+  "config": {
+    "data": "C:\\coding\\comp5434project\\artifacts",
+    "out": "C:\\coding\\comp5434project\\runs\\full3",
+    "epochs": 3,
+    "batch_size": 8192,
+    "valid_batch_size": 8192,
+    "lr": 0.003,
+    "weight_decay": 0.0001,
+    "text_dim": 256,
+    "dense_dim": 128,
+    "hidden_dim": 256,
+    "dropout": 0.15,
+    "emb_dropout": 0.1,
+    "text_mode": "both",
+    "use_wide": true,
+    "dense_mode": "all",
+    "device": "auto",
+    "amp": false,
+    "seed": 42,
+    "num_threads": 16,
+    "patience": 2,
+    "limit_train_shards": null,
+    "limit_valid_shards": null,
+    "limit_train_rows": null,
+    "limit_valid_rows": null,
+    "save_val_preds": false
+  }
+}

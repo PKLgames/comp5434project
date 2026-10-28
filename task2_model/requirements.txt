@@ -1,0 +1,11 @@
+# Core dependencies (CPU or GPU build of torch both work)
+numpy>=1.24
+scipy>=1.10
+pyarrow>=14.0
+torch>=2.1
+
+# Only needed for linear_baseline.py and for the ablation comparison
+scikit-learn>=1.3
+
+# GPU machines: install the CUDA wheel first, then this file, e.g.
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124

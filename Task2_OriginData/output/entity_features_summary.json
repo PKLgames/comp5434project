@@ -1,0 +1,102 @@
+{
+  "statistics_fit_source": "train_80 only",
+  "rating_used_for_statistics": false,
+  "validation_used_for_statistics": false,
+  "training_counts_include_current_record": true,
+  "unseen_count_fill_value": 0,
+  "new_features": [
+    "user_review_count",
+    "user_review_count_log",
+    "user_unseen",
+    "product_review_count",
+    "product_review_count_log",
+    "product_unseen",
+    "parent_product_review_count",
+    "parent_product_review_count_log",
+    "parent_product_unseen"
+  ],
+  "all_candidate_numeric_features": [
+    "title_char_count",
+    "comment_char_count",
+    "title_word_count",
+    "comment_word_count",
+    "votes",
+    "votes_log",
+    "purchased",
+    "review_year",
+    "review_month",
+    "comment_missing",
+    "votes_invalid",
+    "user_review_count",
+    "user_review_count_log",
+    "user_unseen",
+    "product_review_count",
+    "product_review_count_log",
+    "product_unseen",
+    "parent_product_review_count",
+    "parent_product_review_count_log",
+    "parent_product_unseen"
+  ],
+  "text_features": [
+    "title_tfidf",
+    "comment_tfidf"
+  ],
+  "identifier": "id",
+  "target": "rating",
+  "numeric_features_scaled": false,
+  "statistics_tables": [
+    {
+      "key": "user_id",
+      "prefix": "user",
+      "entities": 3873422,
+      "total_reviews": 6104774,
+      "max_review_count": 683,
+      "seconds_including_validation": 7.89,
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\entity_statistics\\user"
+    },
+    {
+      "key": "prod_id",
+      "prefix": "product",
+      "entities": 576493,
+      "total_reviews": 6104774,
+      "max_review_count": 6585,
+      "seconds_including_validation": 3.88,
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\entity_statistics\\product"
+    },
+    {
+      "key": "parent_prod_id",
+      "prefix": "parent_product",
+      "entities": 459631,
+      "total_reviews": 6104774,
+      "max_review_count": 15672,
+      "seconds_including_validation": 3.63,
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\entity_statistics\\parent_product"
+    }
+  ],
+  "datasets": [
+    {
+      "source_features": "train_features_tfidf",
+      "output": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\train_features_with_entity",
+      "rows": 6104774,
+      "unique_ids": 6104774,
+      "invalid_rows": 0,
+      "user_unseen_rows": 0,
+      "product_unseen_rows": 0,
+      "parent_product_unseen_rows": 0,
+      "seconds_including_validation": 63.66
+    },
+    {
+      "source_features": "validation_features_tfidf",
+      "output": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\validation_features_with_entity",
+      "rows": 1526196,
+      "unique_ids": 1526196,
+      "invalid_rows": 0,
+      "user_unseen_rows": 729615,
+      "product_unseen_rows": 49834,
+      "parent_product_unseen_rows": 40077,
+      "seconds_including_validation": 30.42
+    }
+  ],
+  "spark_version": "4.0.1",
+  "total_seconds_including_validation": 110.98
+}

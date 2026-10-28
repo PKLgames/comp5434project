@@ -1,0 +1,65 @@
+{
+  "source": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\clean_train_latest",
+  "method": "rating-stratified deterministic hash ordering",
+  "seed_parameter": 42,
+  "spark_version": "4.0.1",
+  "total_rows": 7630970,
+  "train_rows": 6104774,
+  "validation_rows": 1526196,
+  "train_ratio": 0.7999997379101215,
+  "validation_ratio": 0.20000026208987848,
+  "id_overlap": 0,
+  "rating_distribution": [
+    {
+      "rating": 1,
+      "subset": "train",
+      "count": 897463
+    },
+    {
+      "rating": 1,
+      "subset": "validation",
+      "count": 224366
+    },
+    {
+      "rating": 2,
+      "subset": "train",
+      "count": 527580
+    },
+    {
+      "rating": 2,
+      "subset": "validation",
+      "count": 131896
+    },
+    {
+      "rating": 3,
+      "subset": "train",
+      "count": 591023
+    },
+    {
+      "rating": 3,
+      "subset": "validation",
+      "count": 147756
+    },
+    {
+      "rating": 4,
+      "subset": "train",
+      "count": 707494
+    },
+    {
+      "rating": 4,
+      "subset": "validation",
+      "count": 176874
+    },
+    {
+      "rating": 5,
+      "subset": "train",
+      "count": 3381214
+    },
+    {
+      "rating": 5,
+      "subset": "validation",
+      "count": 845304
+    }
+  ],
+  "total_seconds_including_validation": 67.8
+}
