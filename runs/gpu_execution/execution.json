@@ -1,0 +1,80 @@
+{
+  "data": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\\u7b2c\u4e00\u6b21\u4ea4\u63a5\u6587\u4ef6\uff08\u8fd4\u56de\u7279\u5f81\u7ed3\u679c\uff09\\comp5434project-main\\artifacts",
+  "completed": [
+    {
+      "phase": "phase4_tests",
+      "seconds": 14.9
+    },
+    {
+      "phase": "gpu_runbook_smoke",
+      "seconds": 3.76
+    },
+    {
+      "phase": "gpu_ref_base",
+      "seconds": 90.69
+    },
+    {
+      "phase": "gpu_ref_tmlp",
+      "seconds": 69.29
+    },
+    {
+      "phase": "gpu_ref_stack",
+      "seconds": 13.11
+    },
+    {
+      "phase": "gpu_ord",
+      "seconds": 112.07
+    },
+    {
+      "phase": "gpu_ord_predict",
+      "seconds": 6.57
+    },
+    {
+      "phase": "gpu_film",
+      "seconds": 105.42
+    },
+    {
+      "phase": "gpu_film_predict",
+      "seconds": 5.79
+    },
+    {
+      "phase": "gpu_ord_film",
+      "seconds": 99.98
+    },
+    {
+      "phase": "gpu_ord_compare",
+      "seconds": 250.52
+    },
+    {
+      "phase": "gpu_film_compare",
+      "seconds": 231.96
+    },
+    {
+      "phase": "gpu_ord_film_compare",
+      "seconds": 236.22
+    }
+  ],
+  "status": "phase6_complete",
+  "current": "gpu_ord_film_compare",
+  "reference_rmse": 1.1542803327062987,
+  "comparisons": {
+    "gpu_ord": {
+      "threshold": -0.001,
+      "adopt": false,
+      "rule": "delta_rmse <= threshold AND the paired bootstrap 95% CI on delta_rmse excludes 0"
+    },
+    "gpu_film": {
+      "threshold": -0.001,
+      "adopt": false,
+      "rule": "delta_rmse <= threshold AND the paired bootstrap 95% CI on delta_rmse excludes 0"
+    },
+    "gpu_ord_film": {
+      "threshold": -0.001,
+      "adopt": false,
+      "rule": "delta_rmse <= threshold AND the paired bootstrap 95% CI on delta_rmse excludes 0"
+    }
+  },
+  "phase7": "not run: no candidate passes the phase-6 adoption rule",
+  "published_prediction_diagnostic": "not run: original runs/ensemble_stack/val_preds.npz was not supplied; same-GPU reference was recreated",
+  "result": "keep gpu_ref_stack"
+}

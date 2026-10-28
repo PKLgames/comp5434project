@@ -1,0 +1,15 @@
+["C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\.venv\\Scripts\\python.exe", "-u", "task2_model/stack.py", "--data", "C:\\Users\\Administrator\\Desktop\\DS\\big data\\\u7b2c\u4e00\u6b21\u4ea4\u63a5\u6587\u4ef6\uff08\u8fd4\u56de\u7279\u5f81\u7ed3\u679c\uff09\\comp5434project-main\\artifacts", "--out", "runs/gpu_ref_stack", "--device", "cuda", "--checkpoint", "runs/gpu_ref_base/best.pt", "--checkpoint", "runs/gpu_ref_tmlp/best.pt"]
+predicting with runs/gpu_ref_base/best.pt ...
+  gpu_ref_base: rmse=1.157511
+predicting with runs/gpu_ref_tmlp/best.pt ...
+  gpu_ref_tmlp: rmse=1.157279
+
+members (2):
+  1.157511  C:\Users\Administrator\Desktop\DS\big data\comp-5434-20261-project-task-2\comp5434project\runs\gpu_ref_base\best.pt
+  1.157279  C:\Users\Administrator\Desktop\DS\big data\comp-5434-20261-project-task-2\comp5434project\runs\gpu_ref_tmlp\best.pt
+equal-weight  rmse=1.155167 mae=0.865589
+stack (in-sample)  rmse=1.154277
+stack (5-fold OOF) rmse=1.154280 mae=0.872799
+full-fit weights: +0.47870864, +0.48073871, +0.17339892
+
+wrote runs/gpu_ref_stack/val_preds.npz, stack.json, val_preds_metrics.json

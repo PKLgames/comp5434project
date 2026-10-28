@@ -1,0 +1,8 @@
+{
+  "rmse": 1.15775728225708,
+  "mae": 0.8902244567871094,
+  "rows": 1526196,
+  "blend_alpha": 0.07507364807989636,
+  "blend_alpha_source": "checkpoint (out-of-fold)",
+  "rmse_exp_only": 1.1588655710220337
+}

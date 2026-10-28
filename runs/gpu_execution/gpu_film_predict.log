@@ -1,0 +1,3 @@
+["C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\.venv\\Scripts\\python.exe", "-u", "task2_model/predict.py", "--data", "C:\\Users\\Administrator\\Desktop\\DS\\big data\\\u7b2c\u4e00\u6b21\u4ea4\u63a5\u6587\u4ef6\uff08\u8fd4\u56de\u7279\u5f81\u7ed3\u679c\uff09\\comp5434project-main\\artifacts", "--split", "valid", "--checkpoint", "runs/gpu_film/best.pt", "--device", "cuda", "--out", "runs/gpu_film/val_preds.npz"]
+predicting 1,526,196 rows on cuda with 1 model(s)
+val RMSE=1.1582 MAE=0.8878 rows=1,526,196

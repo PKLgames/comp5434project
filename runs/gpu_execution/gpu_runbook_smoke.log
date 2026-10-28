@@ -1,0 +1,9 @@
+["C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\.venv\\Scripts\\python.exe", "-u", "task2_model/train.py", "--data", "C:\\Users\\Administrator\\Desktop\\DS\\big data\\\u7b2c\u4e00\u6b21\u4ea4\u63a5\u6587\u4ef6\uff08\u8fd4\u56de\u7279\u5f81\u7ed3\u679c\uff09\\comp5434project-main\\artifacts", "--out", "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_runbook_smoke", "--epochs", "1", "--device", "cuda", "--batch-size", "1024", "--valid-batch-size", "1024", "--limit-train-rows", "8192", "--limit-valid-rows", "8192", "--text-dim", "32", "--dense-dim", "16", "--hidden-dim", "32", "--ordinal-weight", "0.5", "--film", "--save-val-preds"]
+device=cuda threads=16
+feature_set=v1 interactions=False dense=26 columns
+selecting the best epoch on rmse
+train rows=8,192 batches=8; valid rows=8,192
+parameters=7,864,423
+steps/epoch=8 total_steps=8
+epoch 1: train_rmse=1.5164 val_rmse=1.5104 val_mae=1.3103 (0.4s) exp_rmse=1.7220 blend_rmse=1.5107 alpha=0.03
+best val RMSE=1.5104 (epoch 1); mean baseline=1.5156; total 0.5s

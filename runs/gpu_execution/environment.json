@@ -1,0 +1,16 @@
+{
+  "python": "3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 22:03:32) [MSC v.1937 64 bit (AMD64)]",
+  "torch": "2.6.0+cu124",
+  "cuda_build": "12.4",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+  "capability": [
+    8,
+    6
+  ],
+  "numpy": "2.4.6",
+  "scipy": "1.17.1",
+  "pyarrow": "26.0.0",
+  "sklearn": "1.9.1",
+  "git_commit": "4e43dff7f82999b9fe0318bf11a2d7b0bc890dc7"
+}

@@ -1,0 +1,69 @@
+{
+  "git_commit": "4e43dff7f82999b9fe0318bf11a2d7b0bc890dc7",
+  "environment": {
+    "python": "3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 22:03:32) [MSC v.1937 64 bit (AMD64)]",
+    "torch": "2.6.0+cu124",
+    "cuda_build": "12.4",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "capability": [
+      8,
+      6
+    ],
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "pyarrow": "26.0.0",
+    "sklearn": "1.9.1",
+    "git_commit": "4e43dff7f82999b9fe0318bf11a2d7b0bc890dc7"
+  },
+  "tests_passed": 39,
+  "train_rows": 6104774,
+  "validation_rows": 1526196,
+  "vocab": {
+    "title_tfidf": 55731,
+    "comment_tfidf": 182382
+  },
+  "reference": {
+    "rmse": 1.1542803327062987,
+    "mae": 0.8727985757235308,
+    "rows": 1526196
+  },
+  "candidates": [
+    {
+      "name": "gpu_ord",
+      "rmse": 1.1577573366480245,
+      "mae": 0.8902244298930108,
+      "delta_rmse": 0.003477003941725787,
+      "ci95": [
+        0.0032205773040275163,
+        0.0037373256832852805
+      ],
+      "adopt": false
+    },
+    {
+      "name": "gpu_film",
+      "rmse": 1.15815339094301,
+      "mae": 0.8878428698800026,
+      "delta_rmse": 0.0038730582367112465,
+      "ci95": [
+        0.0036059331345811908,
+        0.004142755660927672
+      ],
+      "adopt": false
+    },
+    {
+      "name": "gpu_ord_film",
+      "rmse": 1.1558846480333975,
+      "mae": 0.882161202080023,
+      "delta_rmse": 0.0016043153270988153,
+      "ci95": [
+        0.0013420743707808602,
+        0.0018594390523255398
+      ],
+      "adopt": false
+    }
+  ],
+  "decision": "KEEP gpu_ref_stack",
+  "phase7": "not run: no candidate passes the phase-6 adoption rule",
+  "published_prediction_diagnostic": "not run: original runs/ensemble_stack/val_preds.npz was not supplied; same-GPU reference was recreated"
+}

@@ -2,11 +2,9 @@
 
 # Git LFS patterns for large binary files.
 #
-# NOTE (2026-10-28): these patterns are currently INACTIVE in practice, because
-# every large artifact is excluded by .gitignore instead:
-#     runs/**/*.pt, runs/**/*.npz, *.zip, *.7z ...    -> gitignored
-# Git LFS stays initialised, so re-enabling a line below is all that is needed if
-# a genuinely large binary ever has to be committed.
+# GPU_RUNBOOK outputs under runs/gpu_* are explicitly allowed by .gitignore
+# and use Git LFS for checkpoints and validation prediction arrays. Other
+# historical checkpoints, caches and archives remain ignored.
 #
 # The parquet pattern is deliberately commented out.  The repository tracks two
 # small (1.45 MB) test-set parquet files under test_features_with_entity/ that

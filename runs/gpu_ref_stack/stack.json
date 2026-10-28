@@ -1,0 +1,127 @@
+{
+  "rows": 1526196,
+  "folds": 5,
+  "clip": true,
+  "checkpoints": [
+    "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ref_base\\best.pt",
+    "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ref_tmlp\\best.pt"
+  ],
+  "dense_schemas": [
+    [
+      "title_char_count",
+      "comment_char_count",
+      "title_word_count",
+      "comment_word_count",
+      "votes",
+      "votes_log",
+      "purchased",
+      "review_year",
+      "review_month",
+      "comment_missing",
+      "votes_invalid",
+      "user_review_count",
+      "user_review_count_log",
+      "user_unseen",
+      "product_review_count",
+      "product_review_count_log",
+      "product_unseen",
+      "parent_product_review_count",
+      "parent_product_review_count_log",
+      "parent_product_unseen",
+      "log_title_char",
+      "log_comment_char",
+      "title_words_per_char",
+      "comment_words_per_char",
+      "has_votes",
+      "user_minus_product_log"
+    ],
+    [
+      "title_char_count",
+      "comment_char_count",
+      "title_word_count",
+      "comment_word_count",
+      "votes",
+      "votes_log",
+      "purchased",
+      "review_year",
+      "review_month",
+      "comment_missing",
+      "votes_invalid",
+      "user_review_count",
+      "user_review_count_log",
+      "user_unseen",
+      "product_review_count",
+      "product_review_count_log",
+      "product_unseen",
+      "parent_product_review_count",
+      "parent_product_review_count_log",
+      "parent_product_unseen",
+      "log_title_char",
+      "log_comment_char",
+      "title_words_per_char",
+      "comment_words_per_char",
+      "has_votes",
+      "user_minus_product_log"
+    ]
+  ],
+  "individual": {
+    "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ref_base\\best.pt": {
+      "rmse": 1.1575106368982464,
+      "mae": 0.8654624408852662,
+      "rows": 1526196
+    },
+    "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ref_tmlp\\best.pt": {
+      "rmse": 1.157279380930905,
+      "mae": 0.8678346443113439,
+      "rows": 1526196
+    }
+  },
+  "equal_weight": {
+    "rmse": 1.1551669224879728,
+    "mae": 0.8655885735176359,
+    "rows": 1526196
+  },
+  "stack_oof": {
+    "rmse": 1.1542803327062987,
+    "mae": 0.8727985757235308,
+    "rows": 1526196
+  },
+  "stack_in_sample": {
+    "rmse": 1.1542772993080073,
+    "mae": 0.8727958070869576,
+    "rows": 1526196
+  },
+  "weights": [
+    0.47870863680508524,
+    0.48073870554862863
+  ],
+  "intercept": 0.17339892226469128,
+  "fold_weights": [
+    [
+      0.4773720217457913,
+      0.4816481697740649,
+      0.17503807877077984
+    ],
+    [
+      0.47468146244764425,
+      0.4856172865280961,
+      0.16972837477095123
+    ],
+    [
+      0.47789107656938773,
+      0.4819093640111125,
+      0.17245095514493486
+    ],
+    [
+      0.4774801798227665,
+      0.4811116218090936,
+      0.17641317611361712
+    ],
+    [
+      0.48612447903044526,
+      0.4734000608035407,
+      0.17336769488429274
+    ]
+  ],
+  "method": "least squares on [pred_1..pred_N, 1] with contiguous 5-fold out-of-fold weight fitting"
+}

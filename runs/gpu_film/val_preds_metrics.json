@@ -1,0 +1,7 @@
+{
+  "rmse": 1.1581534147262573,
+  "mae": 0.8878428936004639,
+  "rows": 1526196,
+  "blend_alpha": 0.0,
+  "blend_alpha_source": "none (regression-only checkpoint)"
+}

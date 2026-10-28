@@ -1,0 +1,10 @@
+["C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\.venv\\Scripts\\python.exe", "-u", "task2_model/compare.py", "--base", "runs/gpu_ref_stack/val_preds.npz", "--candidate", "runs/gpu_film/val_preds.npz", "--out", "runs/gpu_film/comparison.json"]
+rows         1,526,196
+base RMSE    1.154280   MAE 0.872799
+cand RMSE    1.158153   MAE 0.887843
+delta        +0.003873      +0.015044
+bootstrapping 5,000 paired resamples ...
+delta_rmse 95% CI [+0.003606, +0.004143] (excludes 0: True)
+delta_mae  95% CI [+0.014828, +0.015262]
+decision: KEEP baseline (threshold -0.0010 on delta_rmse)
+wrote runs/gpu_film/comparison.json

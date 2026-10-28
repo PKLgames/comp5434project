@@ -1,0 +1,72 @@
+{
+  "base": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ref_stack\\val_preds.npz",
+  "candidate": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ord\\val_preds.npz",
+  "rows": 1526196,
+  "base_metrics": {
+    "rmse": 1.1542803327062987,
+    "mae": 0.8727985757235308
+  },
+  "candidate_metrics": {
+    "rmse": 1.1577573366480245,
+    "mae": 0.8902244298930108
+  },
+  "delta": {
+    "rmse": 0.003477003941725787,
+    "mae": 0.01742585416947995
+  },
+  "bootstrap": {
+    "delta_rmse": {
+      "point": 0.003477003941725787,
+      "ci95_low": 0.0032205773040275163,
+      "ci95_high": 0.0037373256832852805,
+      "excludes_zero": true,
+      "std_error": 0.00013344681695061033,
+      "reps": 5000
+    },
+    "delta_mae": {
+      "point": 0.01742585416947995,
+      "ci95_low": 0.017209891294595662,
+      "ci95_high": 0.01763928327774968,
+      "excludes_zero": true,
+      "std_error": 0.00010969012108693764,
+      "reps": 5000
+    }
+  },
+  "per_rating": {
+    "1": {
+      "rows": 224366,
+      "base_rmse": 1.9612733877278117,
+      "candidate_rmse": 1.9808336450596857,
+      "delta_rmse": 0.019560257331874054
+    },
+    "2": {
+      "rows": 131896,
+      "base_rmse": 1.6570359295444903,
+      "candidate_rmse": 1.6427570083670466,
+      "delta_rmse": -0.01427892117744367
+    },
+    "3": {
+      "rows": 147756,
+      "base_rmse": 1.0431720535365732,
+      "candidate_rmse": 1.0067030157250125,
+      "delta_rmse": -0.036469037811560634
+    },
+    "4": {
+      "rows": 176874,
+      "base_rmse": 0.7852020662675507,
+      "candidate_rmse": 0.7590315398623874,
+      "delta_rmse": -0.026170526405163375
+    },
+    "5": {
+      "rows": 845304,
+      "base_rmse": 0.7980845811830756,
+      "candidate_rmse": 0.8123189431006062,
+      "delta_rmse": 0.01423436191753058
+    }
+  },
+  "decision": {
+    "threshold": -0.001,
+    "adopt": false,
+    "rule": "delta_rmse <= threshold AND the paired bootstrap 95% CI on delta_rmse excludes 0"
+  }
+}

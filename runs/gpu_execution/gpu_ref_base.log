@@ -1,0 +1,20 @@
+["C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\.venv\\Scripts\\python.exe", "-u", "task2_model/train.py", "--data", "C:\\Users\\Administrator\\Desktop\\DS\\big data\\\u7b2c\u4e00\u6b21\u4ea4\u63a5\u6587\u4ef6\uff08\u8fd4\u56de\u7279\u5f81\u7ed3\u679c\uff09\\comp5434project-main\\artifacts", "--out", "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\comp5434project\\runs\\gpu_ref_base", "--epochs", "3", "--device", "cuda", "--batch-size", "8192", "--valid-batch-size", "8192", "--lr", "0.003", "--weight-decay", "0.0001", "--text-dim", "256", "--dense-dim", "128", "--hidden-dim", "256", "--dropout", "0.15", "--emb-dropout", "0.1", "--seed", "42", "--num-threads", "16", "--save-val-preds"]
+device=cuda threads=16
+feature_set=v1 interactions=False dense=26 columns
+selecting the best epoch on rmse
+train rows=6,104,774 batches=746; valid rows=1,526,196
+parameters=61,396,898
+steps/epoch=768 total_steps=2304
+  epoch 1 step 200/746 train_rmse=1.2378
+  epoch 1 step 400/746 train_rmse=1.2057
+  epoch 1 step 600/746 train_rmse=1.1927
+epoch 1: train_rmse=1.1860 val_rmse=1.1593 val_mae=0.8950 (27.2s)
+  epoch 2 step 200/746 train_rmse=1.1399
+  epoch 2 step 400/746 train_rmse=1.1410
+  epoch 2 step 600/746 train_rmse=1.1428
+epoch 2: train_rmse=1.1426 val_rmse=1.1575 val_mae=0.8655 (28.4s)
+  epoch 3 step 200/746 train_rmse=1.1192
+  epoch 3 step 400/746 train_rmse=1.1176
+  epoch 3 step 600/746 train_rmse=1.1169
+epoch 3: train_rmse=1.1162 val_rmse=1.1631 val_mae=0.8679 (30.3s)
+best val RMSE=1.1575 (epoch 2); mean baseline=1.5149; total 86.7s

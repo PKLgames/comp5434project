@@ -52,6 +52,19 @@ runs/**/*.pth
 # Derived prediction tensors (small, but reproducible from checkpoints)
 runs/**/*.npz
 
+# GPU_RUNBOOK execution artifacts intentionally published via Git LFS.
+!runs/gpu_ref_base/best.pt
+!runs/gpu_ref_base/val_preds.npz
+!runs/gpu_ref_tmlp/best.pt
+!runs/gpu_ref_tmlp/val_preds.npz
+!runs/gpu_ref_stack/val_preds.npz
+!runs/gpu_ord/best.pt
+!runs/gpu_ord/val_preds.npz
+!runs/gpu_film/best.pt
+!runs/gpu_film/val_preds.npz
+!runs/gpu_ord_film/best.pt
+!runs/gpu_ord_film/val_preds.npz
+
 # ---------------------------------------------------------------------------
 # Datasets: large Spark parquet output is not committed.
 # Keep only the small JSON summaries.

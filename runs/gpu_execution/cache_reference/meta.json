@@ -1,0 +1,481 @@
+{
+  "version": 1,
+  "source": {
+    "train": "C:\\coding\\comp5434project\\Task2数据交接\\output\\train_features_with_entity",
+    "valid": "C:\\coding\\comp5434project\\Task2数据交接\\output\\validation_features_with_entity"
+  },
+  "dense_columns": [
+    "title_char_count",
+    "comment_char_count",
+    "title_word_count",
+    "comment_word_count",
+    "votes",
+    "votes_log",
+    "purchased",
+    "review_year",
+    "review_month",
+    "comment_missing",
+    "votes_invalid",
+    "user_review_count",
+    "user_review_count_log",
+    "user_unseen",
+    "product_review_count",
+    "product_review_count_log",
+    "product_unseen",
+    "parent_product_review_count",
+    "parent_product_review_count_log",
+    "parent_product_unseen",
+    "log_title_char",
+    "log_comment_char",
+    "title_words_per_char",
+    "comment_words_per_char",
+    "has_votes",
+    "user_minus_product_log"
+  ],
+  "feature_groups": {
+    "numeric": [
+      "title_char_count",
+      "comment_char_count",
+      "title_word_count",
+      "comment_word_count",
+      "votes",
+      "votes_log",
+      "purchased",
+      "review_year",
+      "review_month",
+      "comment_missing",
+      "votes_invalid",
+      "log_title_char",
+      "log_comment_char",
+      "title_words_per_char",
+      "comment_words_per_char",
+      "has_votes",
+      "user_minus_product_log"
+    ],
+    "entity": [
+      "user_review_count",
+      "user_review_count_log",
+      "user_unseen",
+      "product_review_count",
+      "product_review_count_log",
+      "product_unseen",
+      "parent_product_review_count",
+      "parent_product_review_count_log",
+      "parent_product_unseen"
+    ],
+    "all": [
+      "title_char_count",
+      "comment_char_count",
+      "title_word_count",
+      "comment_word_count",
+      "votes",
+      "votes_log",
+      "purchased",
+      "review_year",
+      "review_month",
+      "comment_missing",
+      "votes_invalid",
+      "log_title_char",
+      "log_comment_char",
+      "title_words_per_char",
+      "comment_words_per_char",
+      "has_votes",
+      "user_minus_product_log",
+      "user_review_count",
+      "user_review_count_log",
+      "user_unseen",
+      "product_review_count",
+      "product_review_count_log",
+      "product_unseen",
+      "parent_product_review_count",
+      "parent_product_review_count_log",
+      "parent_product_unseen"
+    ]
+  },
+  "target": "rating",
+  "vocab": {
+    "title_tfidf": 55731,
+    "comment_tfidf": 182382
+  },
+  "splits": {
+    "train": {
+      "split": "train",
+      "rows": 6104774,
+      "shards": [
+        {
+          "file": "shard_00000.npz",
+          "rows": 95570
+        },
+        {
+          "file": "shard_00001.npz",
+          "rows": 95452
+        },
+        {
+          "file": "shard_00002.npz",
+          "rows": 94753
+        },
+        {
+          "file": "shard_00003.npz",
+          "rows": 95517
+        },
+        {
+          "file": "shard_00004.npz",
+          "rows": 95297
+        },
+        {
+          "file": "shard_00005.npz",
+          "rows": 95340
+        },
+        {
+          "file": "shard_00006.npz",
+          "rows": 95105
+        },
+        {
+          "file": "shard_00007.npz",
+          "rows": 95491
+        },
+        {
+          "file": "shard_00008.npz",
+          "rows": 94798
+        },
+        {
+          "file": "shard_00009.npz",
+          "rows": 95212
+        },
+        {
+          "file": "shard_00010.npz",
+          "rows": 95711
+        },
+        {
+          "file": "shard_00011.npz",
+          "rows": 95302
+        },
+        {
+          "file": "shard_00012.npz",
+          "rows": 95045
+        },
+        {
+          "file": "shard_00013.npz",
+          "rows": 95259
+        },
+        {
+          "file": "shard_00014.npz",
+          "rows": 95569
+        },
+        {
+          "file": "shard_00015.npz",
+          "rows": 95448
+        },
+        {
+          "file": "shard_00016.npz",
+          "rows": 95692
+        },
+        {
+          "file": "shard_00017.npz",
+          "rows": 95700
+        },
+        {
+          "file": "shard_00018.npz",
+          "rows": 95249
+        },
+        {
+          "file": "shard_00019.npz",
+          "rows": 95551
+        },
+        {
+          "file": "shard_00020.npz",
+          "rows": 95892
+        },
+        {
+          "file": "shard_00021.npz",
+          "rows": 95128
+        },
+        {
+          "file": "shard_00022.npz",
+          "rows": 95136
+        },
+        {
+          "file": "shard_00023.npz",
+          "rows": 95579
+        },
+        {
+          "file": "shard_00024.npz",
+          "rows": 95728
+        },
+        {
+          "file": "shard_00025.npz",
+          "rows": 95086
+        },
+        {
+          "file": "shard_00026.npz",
+          "rows": 96258
+        },
+        {
+          "file": "shard_00027.npz",
+          "rows": 95320
+        },
+        {
+          "file": "shard_00028.npz",
+          "rows": 95425
+        },
+        {
+          "file": "shard_00029.npz",
+          "rows": 95134
+        },
+        {
+          "file": "shard_00030.npz",
+          "rows": 95502
+        },
+        {
+          "file": "shard_00031.npz",
+          "rows": 95243
+        },
+        {
+          "file": "shard_00032.npz",
+          "rows": 95155
+        },
+        {
+          "file": "shard_00033.npz",
+          "rows": 95441
+        },
+        {
+          "file": "shard_00034.npz",
+          "rows": 95517
+        },
+        {
+          "file": "shard_00035.npz",
+          "rows": 95993
+        },
+        {
+          "file": "shard_00036.npz",
+          "rows": 94829
+        },
+        {
+          "file": "shard_00037.npz",
+          "rows": 96057
+        },
+        {
+          "file": "shard_00038.npz",
+          "rows": 94950
+        },
+        {
+          "file": "shard_00039.npz",
+          "rows": 95889
+        },
+        {
+          "file": "shard_00040.npz",
+          "rows": 96081
+        },
+        {
+          "file": "shard_00041.npz",
+          "rows": 95823
+        },
+        {
+          "file": "shard_00042.npz",
+          "rows": 95868
+        },
+        {
+          "file": "shard_00043.npz",
+          "rows": 95099
+        },
+        {
+          "file": "shard_00044.npz",
+          "rows": 94989
+        },
+        {
+          "file": "shard_00045.npz",
+          "rows": 95534
+        },
+        {
+          "file": "shard_00046.npz",
+          "rows": 95132
+        },
+        {
+          "file": "shard_00047.npz",
+          "rows": 95523
+        },
+        {
+          "file": "shard_00048.npz",
+          "rows": 95516
+        },
+        {
+          "file": "shard_00049.npz",
+          "rows": 95205
+        },
+        {
+          "file": "shard_00050.npz",
+          "rows": 94926
+        },
+        {
+          "file": "shard_00051.npz",
+          "rows": 95443
+        },
+        {
+          "file": "shard_00052.npz",
+          "rows": 95581
+        },
+        {
+          "file": "shard_00053.npz",
+          "rows": 95538
+        },
+        {
+          "file": "shard_00054.npz",
+          "rows": 95257
+        },
+        {
+          "file": "shard_00055.npz",
+          "rows": 94541
+        },
+        {
+          "file": "shard_00056.npz",
+          "rows": 95387
+        },
+        {
+          "file": "shard_00057.npz",
+          "rows": 95144
+        },
+        {
+          "file": "shard_00058.npz",
+          "rows": 95330
+        },
+        {
+          "file": "shard_00059.npz",
+          "rows": 95216
+        },
+        {
+          "file": "shard_00060.npz",
+          "rows": 95450
+        },
+        {
+          "file": "shard_00061.npz",
+          "rows": 95778
+        },
+        {
+          "file": "shard_00062.npz",
+          "rows": 95187
+        },
+        {
+          "file": "shard_00063.npz",
+          "rows": 94903
+        }
+      ]
+    },
+    "valid": {
+      "split": "valid",
+      "rows": 1526196,
+      "shards": [
+        {
+          "file": "shard_00000.npz",
+          "rows": 143543
+        },
+        {
+          "file": "shard_00001.npz",
+          "rows": 143309
+        },
+        {
+          "file": "shard_00002.npz",
+          "rows": 143290
+        },
+        {
+          "file": "shard_00003.npz",
+          "rows": 143432
+        },
+        {
+          "file": "shard_00004.npz",
+          "rows": 142822
+        },
+        {
+          "file": "shard_00005.npz",
+          "rows": 143046
+        },
+        {
+          "file": "shard_00006.npz",
+          "rows": 142545
+        },
+        {
+          "file": "shard_00007.npz",
+          "rows": 143289
+        },
+        {
+          "file": "shard_00008.npz",
+          "rows": 142683
+        },
+        {
+          "file": "shard_00009.npz",
+          "rows": 143133
+        },
+        {
+          "file": "shard_00010.npz",
+          "rows": 95104
+        }
+      ]
+    }
+  },
+  "dense_stats": {
+    "rows": 6104774,
+    "mean": [
+      21.19778488114384,
+      152.82037959144762,
+      3.793952732730155,
+      28.375221916487,
+      0.9773249591221559,
+      0.2952337485656658,
+      0.9202954933303018,
+      2019.0313508739225,
+      6.2500344812109345,
+      0.0011640070541513903,
+      1.638062277162103e-07,
+      5.25761903716665,
+      1.2363403180443369,
+      0.0,
+      179.9130165997955,
+      3.8444879651456865,
+      0.0,
+      503.2954428779837,
+      4.462783488388586,
+      0.0,
+      2.880704422346103,
+      4.441681163700664,
+      0.16992832582870218,
+      0.1812302620696775,
+      0.26476541146322535,
+      -2.6081476483385946
+    ],
+    "std": [
+      16.170728458741085,
+      207.8250607543768,
+      2.9964296546723843,
+      38.0659431372879,
+      15.30046303746574,
+      0.5950007481671657,
+      0.27083518657338124,
+      2.837396149865701,
+      3.5315748806323377,
+      0.03409768528403762,
+      0.00040472978749250723,
+      22.055271472422916,
+      0.7727564813530734,
+      1.0,
+      464.0453191383468,
+      1.656938133992337,
+      1.0,
+      1344.7937177922904,
+      1.9670109382124694,
+      1.0,
+      0.6562244738623992,
+      1.1490375463336775,
+      0.039193424430976724,
+      0.02747132911688344,
+      0.4412082142888257,
+      1.8878720020636688
+    ]
+  },
+  "train_rating_distribution": [
+    897463,
+    527580,
+    591023,
+    707494,
+    3381214
+  ],
+  "train_rating_mean": 3.8431787974460643
+}

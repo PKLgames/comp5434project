@@ -1,0 +1,256 @@
+{
+  "source_commit": "4e43dff7f82999b9fe0318bf11a2d7b0bc890dc7",
+  "files": [
+    {
+      "path": "runs/gpu_execution/cache_reference/meta.json",
+      "bytes": 10800,
+      "sha256": "ced2e484fa2645ea1af67a6f8afc05eb51d7037d7233703b2f79fd84b51486b4"
+    },
+    {
+      "path": "runs/gpu_execution/cache_reference/vocab_comment.npy",
+      "bytes": 729656,
+      "sha256": "beab7e26d7edd30eceedc06baeef414cfa378a578b7b2e7a74183b2668d196b5"
+    },
+    {
+      "path": "runs/gpu_execution/cache_reference/vocab_title.npy",
+      "bytes": 223052,
+      "sha256": "73a4ceeca85b8047be9f0165b1e73e68f7d9ef74584ba37624bcdb7842631033"
+    },
+    {
+      "path": "runs/gpu_execution/environment.json",
+      "bytes": 418,
+      "sha256": "e75d177018c289ad3869e1f0f6646c836c2201b041590c19c82387d552f1050c"
+    },
+    {
+      "path": "runs/gpu_execution/execution.json",
+      "bytes": 2073,
+      "sha256": "98cdb615642cca0db1ec1247159186ceffa386d62cb2b5f4a4cbcb9d5ce67506"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_film.log",
+      "bytes": 1684,
+      "sha256": "a1623f1c74811aa2b5910303a930f8202dcea2d7f176bdbebea3c621f7cd2ebf"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_film_compare.log",
+      "bytes": 676,
+      "sha256": "7d78d59fed1f5d5cb51062bef6ab862119e763523072582ad39a5118b114b69e"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_film_predict.log",
+      "bytes": 563,
+      "sha256": "560c77d29c316b46b5d0780a316b931913c4ce2a0a2f41093cd58c5f001227ca"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ord.log",
+      "bytes": 1857,
+      "sha256": "2cfbf0cd8bce927832ff9012cf9a6cf6787af7bd3aaec68c27c0bbad8cbe6bb1"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ord_compare.log",
+      "bytes": 673,
+      "sha256": "a41d11a40c5477960e7fedecf12df44db673b2f999bf76406b8f635f32da29e0"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ord_film.log",
+      "bytes": 1728,
+      "sha256": "a1b619e9b3026219593bc1cc2a42e58fc193a7d29d215df24a4fe6628af6034b"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ord_film_compare.log",
+      "bytes": 688,
+      "sha256": "a898090fef536b163fa5cf1fb32069b733a57b6aaa7eb8a85a86cc174e1915a5"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ord_predict.log",
+      "bytes": 628,
+      "sha256": "75a47901592249cc3668c2cec14159bd8d1bdd76c28fa6549f8a8e186ab5c789"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ref_base.log",
+      "bytes": 1650,
+      "sha256": "c9ae88b4f3b7563a3b9e2c76ab69f3fb73243beb63fa6dfcbcba117ded84d9ab"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ref_stack.log",
+      "bytes": 1175,
+      "sha256": "bef299fad9e22a9685d8a10c220cff98866020dbf2f6bb329392a9d056b9b063"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_ref_tmlp.log",
+      "bytes": 1471,
+      "sha256": "ec11af64cf783d36b0b4410f5705b89a13aa346a68fd8d1d00e4e7929460d046"
+    },
+    {
+      "path": "runs/gpu_execution/gpu_runbook_smoke.log",
+      "bytes": 1135,
+      "sha256": "6e4abb5a7d8f4f6772fbe493d83d4f66fdc52333db01eb3ef41148191b9f745e"
+    },
+    {
+      "path": "runs/gpu_execution/phase4_tests.log",
+      "bytes": 269,
+      "sha256": "e789777b96923ef7280d0b928f62c57808ac7159d35b0422b69023ed95caa289"
+    },
+    {
+      "path": "runs/gpu_execution/requirements-frozen.txt",
+      "bytes": 409,
+      "sha256": "d2f3a8c32e7aa7ab248751141db9b2c07f59701786ac67b92409c963f63715ce"
+    },
+    {
+      "path": "runs/gpu_execution/results.json",
+      "bytes": 1873,
+      "sha256": "ba98d253c6bc08a8f101ae83fed586ac7e3003a90284bb426b61fc767038af41"
+    },
+    {
+      "path": "runs/gpu_execution/RESULTS.md",
+      "bytes": 3159,
+      "sha256": "71eb18461a55c5a705f4aef3e60e150fa77d51576f888eebd78cfe519d3106df"
+    },
+    {
+      "path": "runs/gpu_execution/runbook_driver.py",
+      "bytes": 5832,
+      "sha256": "09233766f4e1382ad927791815edceb832c0b9d47f92f3c96b5c8a0132e9722d"
+    },
+    {
+      "path": "runs/gpu_film/args.json",
+      "bytes": 984,
+      "sha256": "bbb5afbcc306124e369725ed2edf7c5be8de759619ac5e6d3f73bb7ee311e899"
+    },
+    {
+      "path": "runs/gpu_film/best.pt",
+      "bytes": 246137402,
+      "sha256": "e50918cb75dae9c8bfae03989d4f2512b6555408cc946fbf2fe2e9e1319bd52b"
+    },
+    {
+      "path": "runs/gpu_film/comparison.json",
+      "bytes": 2147,
+      "sha256": "28fffaa09234e6d3e2677e792fc9b6afb0a3abd529fd05083435def935f01859"
+    },
+    {
+      "path": "runs/gpu_film/summary.json",
+      "bytes": 2084,
+      "sha256": "f4398eb089d9a89fab53c615b2531d128b1b2d5ea210871e705816e9ec94ff1e"
+    },
+    {
+      "path": "runs/gpu_film/val_preds.npz",
+      "bytes": 12210064,
+      "sha256": "0ab2bbda17b23fe76eb4e2f38ab2872b83f6511aea95f92dc3b71cbe40fe3b35"
+    },
+    {
+      "path": "runs/gpu_film/val_preds_metrics.json",
+      "bytes": 169,
+      "sha256": "115535cdf8705440c3d193113b3ca04f09bb97cc3442bf06ca3ccfc88ae12af8"
+    },
+    {
+      "path": "runs/gpu_ord/args.json",
+      "bytes": 984,
+      "sha256": "eed3126b19d56bc87ef10b26dc6498098d8c4a06e318466f23637a81ead2a0c2"
+    },
+    {
+      "path": "runs/gpu_ord/best.pt",
+      "bytes": 245596102,
+      "sha256": "8fd486f5e262f90ae58a334d75594317afff309aa45100c5d5ad3e071f14b212"
+    },
+    {
+      "path": "runs/gpu_ord/comparison.json",
+      "bytes": 2141,
+      "sha256": "8350e8fec7113495e67185fe84ec21364903a4815a853fdf8ffe1ee7a4d206bb"
+    },
+    {
+      "path": "runs/gpu_ord/summary.json",
+      "bytes": 2473,
+      "sha256": "561c7fb770efccb531edf4903c246bed535cbdfa5e0d48af3ee78d271567dd54"
+    },
+    {
+      "path": "runs/gpu_ord/val_preds.npz",
+      "bytes": 18315086,
+      "sha256": "337a7f960da9672e2049f203cb4446d1cd6ce156f1ba89edd72298addf9161a9"
+    },
+    {
+      "path": "runs/gpu_ord/val_preds_metrics.json",
+      "bytes": 214,
+      "sha256": "5bf300b641de4eaab59b488e1bf9b437f37e444e3b5c81619c01b7823dc7bb0a"
+    },
+    {
+      "path": "runs/gpu_ord_film/args.json",
+      "bytes": 988,
+      "sha256": "94e3fcb5599bf1c609f4f041effcd768a95029644ac09b8f237424b02f24b762"
+    },
+    {
+      "path": "runs/gpu_ord_film/best.pt",
+      "bytes": 246139182,
+      "sha256": "6b4f52890f511ae0b61b869228abc6bd842da8e2a13e6a5c0861f4f9d4bda23e"
+    },
+    {
+      "path": "runs/gpu_ord_film/comparison.json",
+      "bytes": 2146,
+      "sha256": "849ff92b1b917339dbed77c27c61f40386cb7dc62be25cca1b32778a0b3a024e"
+    },
+    {
+      "path": "runs/gpu_ord_film/summary.json",
+      "bytes": 2487,
+      "sha256": "feededf7a2bb29b989b53e8a56cdcf3bc54b0452221d867f07a8e104605efed8"
+    },
+    {
+      "path": "runs/gpu_ord_film/val_preds.npz",
+      "bytes": 18315086,
+      "sha256": "9ab2e9a47ee5d1025bb1d3013a7771f80f613cc04d9dac7c6865ed5dd1ff6c16"
+    },
+    {
+      "path": "runs/gpu_ref_base/args.json",
+      "bytes": 988,
+      "sha256": "6840fb8c5e80b79dc9f3b39decd93a32508e42e2fa9362987c9d0897996ad405"
+    },
+    {
+      "path": "runs/gpu_ref_base/best.pt",
+      "bytes": 245594322,
+      "sha256": "35b3cfc6935308961179f0dfa63d6ddae0e6430cbd6a603315fe002503f11970"
+    },
+    {
+      "path": "runs/gpu_ref_base/summary.json",
+      "bytes": 2088,
+      "sha256": "008efc59b078eef07c17d6beaf9431ab2ad281b94cfef2da121515a162dcfd38"
+    },
+    {
+      "path": "runs/gpu_ref_base/val_preds.npz",
+      "bytes": 12210064,
+      "sha256": "1f0c65e442a9fef2c50eb2286609cffb67337ff6eecad2ddd156523cca17518d"
+    },
+    {
+      "path": "runs/gpu_ref_stack/stack.json",
+      "bytes": 3393,
+      "sha256": "fa08987b0ad2c3b510e6acdc5495207bcf893e8b66077f8a46da356de4d98518"
+    },
+    {
+      "path": "runs/gpu_ref_stack/val_preds.npz",
+      "bytes": 24419632,
+      "sha256": "790bff4b7c903ca77db48a2ac5bd63de0edb92e4b3a2903d2baccba32d8e9ac7"
+    },
+    {
+      "path": "runs/gpu_ref_stack/val_preds_metrics.json",
+      "bytes": 84,
+      "sha256": "6e5f96d8ec243f3242c4439511e199cb00c99ed10f2c09f1c852ba75629dd1cf"
+    },
+    {
+      "path": "runs/gpu_ref_tmlp/args.json",
+      "bytes": 987,
+      "sha256": "5bbaa83718aa876f61bfe3980bf578d16973b199b00f9a80759d2e07b15ccd20"
+    },
+    {
+      "path": "runs/gpu_ref_tmlp/best.pt",
+      "bytes": 245857926,
+      "sha256": "81d5f15bc6d601ca8a33ab81d0d42840dd31bec3eec7c02e207c4ee3b5e3b543"
+    },
+    {
+      "path": "runs/gpu_ref_tmlp/summary.json",
+      "bytes": 1876,
+      "sha256": "21d022aafc53dea90a04d9d10a4b7e4a3d717023abf6f83e0339ba04e134a04e"
+    },
+    {
+      "path": "runs/gpu_ref_tmlp/val_preds.npz",
+      "bytes": 12210064,
+      "sha256": "9ea4d18746504734d6f92f621ffe80c3e8cb2b30ffbc3f6f402e098d9aceb51e"
+    }
+  ],
+  "total_bytes": 1328022632
+}
