@@ -25,8 +25,8 @@ Output layout
 Usage
 -----
 # Build train/valid caches (run once, ~2-3 minutes for the full data)
-python preprocess.py --train-dir ../Task2数据交接/output/train_features_with_entity \
-                     --valid-dir ../Task2数据交接/output/validation_features_with_entity \
+python preprocess.py --train-dir ../Task2_Token_Dataset/新token化/train_features_with_entity \
+                     --valid-dir ../Task2_Token_Dataset/新token化/validation_features_with_entity \
                      --out ../artifacts
 
 # Later, when Part A delivers the test features, reuse the saved vocabulary:

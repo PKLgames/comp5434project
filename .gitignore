@@ -28,17 +28,22 @@ runs/**/*.pth
 runs/**/*.npz
 
 # ---------------------------------------------------------------------------
-# Handover data: the parquet shards total 2.16 GB.
-# Keep the small JSON summaries, ignore the large Spark output directories.
+# Datasets: large Spark parquet output is not committed.
+# Keep only the small JSON summaries.
+#   Task2_OriginData/output/            original Part-A handover (2.16 GB)
+#   Task2_Token_Dataset/新token化/       re-tokenised feature dataset (2.02 GB)
 # ---------------------------------------------------------------------------
 Task2_OriginData/output/*
 !Task2_OriginData/output/*.json
+Task2_Token_Dataset/新token化/*
+!Task2_Token_Dataset/新token化/*.json
 
 # ---------------------------------------------------------------------------
 # Generic large archives (also catches future data drops)
 # ---------------------------------------------------------------------------
 *.zip
 *.7z
+*.rar
 *.tar
 *.tar.gz
 *.tgz

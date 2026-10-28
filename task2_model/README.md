@@ -115,10 +115,10 @@ minutes, a recent GPU typically finishes the same epoch in a couple of minutes.
 ### 4.1 Unpack and preprocess (once)
 
 ```bash
-# from the folder that contains Task2数据交接/
+# from the folder that contains Task2_Token_Dataset/
 python task2_model/preprocess.py \
-  --train-dir "Task2数据交接/output/train_features_with_entity" \
-  --valid-dir "Task2数据交接/output/validation_features_with_entity" \
+  --train-dir "Task2_Token_Dataset/新token化/train_features_with_entity" \
+  --valid-dir "Task2_Token_Dataset/新token化/validation_features_with_entity" \
   --out artifacts
 ```
 

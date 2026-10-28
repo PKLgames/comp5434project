@@ -1,0 +1,63 @@
+{
+  "method": "HashingTF + IDF + L2 normalization",
+  "idf_fit_source": "train_features_base only",
+  "validation_used_for_fitting": false,
+  "numeric_features": [
+    "title_char_count",
+    "comment_char_count",
+    "title_word_count",
+    "comment_word_count",
+    "votes",
+    "votes_log",
+    "purchased",
+    "review_year",
+    "review_month",
+    "comment_missing",
+    "votes_invalid"
+  ],
+  "text_features": [
+    "title_tfidf",
+    "comment_tfidf"
+  ],
+  "identifier": "id",
+  "target": "rating",
+  "numeric_features_scaled": false,
+  "models": [
+    {
+      "input_column": "title_tokens",
+      "output_column": "title_tfidf",
+      "dimension": 65536,
+      "min_doc_freq": 2,
+      "normalization": "L2",
+      "idf_fit_seconds": 6.08,
+      "model_path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\text_models\\title_tfidf"
+    },
+    {
+      "input_column": "comment_tokens",
+      "output_column": "comment_tfidf",
+      "dimension": 262144,
+      "min_doc_freq": 2,
+      "normalization": "L2",
+      "idf_fit_seconds": 18.4,
+      "model_path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\text_models\\comment_tfidf"
+    }
+  ],
+  "datasets": [
+    {
+      "output": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\train_features_tfidf",
+      "rows": 6104774,
+      "null_vector_rows": 0,
+      "transform_and_write_seconds": 39.93,
+      "validation_and_display_seconds": 2.92
+    },
+    {
+      "output": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\output\\validation_features_tfidf",
+      "rows": 1526196,
+      "null_vector_rows": 0,
+      "transform_and_write_seconds": 10.05,
+      "validation_and_display_seconds": 0.65
+    }
+  ],
+  "spark_version": "4.0.1",
+  "total_seconds_including_validation": 82.72
+}

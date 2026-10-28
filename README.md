@@ -16,8 +16,10 @@ task2_model/            model, training, inference and evaluation code
   linear_baseline.py     linear reference model
   analyze.py             per-rating and calibration analysis
   results/               consolidated validation metrics (JSON)
-Task2_OriginData/       Part-A scripts and small JSON summaries
+Task2_OriginData/       original Part-A scripts and small JSON summaries
   output/                large Spark parquet output is NOT committed
+Task2_Token_Dataset/    re-tokenised feature dataset
+  新token化/             train/validation parquet features (not committed)
 Project.pdf             assignment specification
 runs/                   small training summaries / configs (checkpoints not committed)
 ```
@@ -27,8 +29,8 @@ runs/                   small training summaries / configs (checkpoints not comm
 ```bash
 pip install -r task2_model/requirements.txt
 python task2_model/preprocess.py \
-  --train-dir Task2_OriginData/output/train_features_with_entity \
-  --valid-dir Task2_OriginData/output/validation_features_with_entity \
+  --train-dir "Task2_Token_Dataset/新token化/train_features_with_entity" \
+  --valid-dir "Task2_Token_Dataset/新token化/validation_features_with_entity" \
   --out artifacts
 python task2_model/train.py --data artifacts --out runs/full --epochs 6
 ```
@@ -46,7 +48,7 @@ GPU setup, feature ablations and measured results.
 
 ## Data and large files
 
-The handover parquet data (~2.16 GB) and the derived cache (~2.30 GB) are not
+The feature parquet data (~2.02 GB) and the derived cache (~2.30 GB) are not
 committed.  They are reproducible from the original `Task2数据交接.zip` and the
 Part-A scripts.  Model checkpoints (~234 MB each) exceed GitHub's 100 MB file
 limit and are also excluded; retrain with `task2_model/train.py`.
