@@ -85,3 +85,16 @@ Task2_Token_Dataset/tokenized/*
 *.tar
 *.tar.gz
 *.tgz
+
+# ---------------------------------------------------------------------------
+# Colab helper cache (packed upload bundle, see COLAB.md)
+# ---------------------------------------------------------------------------
+colab/.cache/
+
+# ---------------------------------------------------------------------------
+# Competition data (Kaggle).  1.9 GB of CSVs; download instead:
+#   import kagglehub
+#   path = kagglehub.competition_download('comp-5434-20261-project-task-2')
+# ---------------------------------------------------------------------------
+Dataset2_metadata/
+*.jsonl

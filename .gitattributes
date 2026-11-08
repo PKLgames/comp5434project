@@ -20,3 +20,14 @@
 *.pth     filter=lfs diff=lfs merge=lfs -text
 *.zip     filter=lfs diff=lfs merge=lfs -text
 *.7z      filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# Files committed by the leaderboard solution (task2_model/audit/).
+# They must stay byte-identical to what was uploaded to the leaderboard, so
+# no newline conversion is applied to them, and the per-model prediction
+# arrays are stored as plain blobs (largest is clean_y.npz, 23 MB, well below
+# GitHub's 100 MB limit) so that a plain `git clone` needs no git-lfs.
+# ---------------------------------------------------------------------------
+*.csv -text
+task2_model/audit/preds/*.npy -text !filter
+task2_model/audit/preds/*.npz -text !filter

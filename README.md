@@ -4,6 +4,33 @@ Predict the 1–5 star rating of a review (RMSE metric) from the features produc
 by Part A (Spark 4.0.1): hashed TF-IDF text vectors, base numeric fields and
 user/product review-count statistics.
 
+## Leaderboard solution — RMSE 0.49893
+
+The best submission (`submission_ens.csv`) is an ensemble of four fine-tuned
+transformer encoders trained against **recovered clean labels**, not the
+delivered ones. The delivered `train.csv` has ~25 % of its `rating` values
+replaced by a uniform random 1–5 (recovered p = 0.2499 by exact-match against
+the public Amazon-Reviews-2023 Grocery corpus), while the leaderboard scores
+against the clean rating — which is why the shipped Part-B checkpoint scores
+1.55180 and a plain bag-of-words linear model already scores 0.83641.
+
+| submission | model | val RMSE | leaderboard |
+| --- | --- | ---: | ---: |
+| `submission.csv` | delivered `runs/full3/best.pt` | 1.1573 | 1.55180 |
+| `submission_linear.csv` | hashed-BoW SGDRegressor | 1.2029 | 0.83641 |
+| `submission_iso.csv` | + isotonic calibration on clean labels | 0.7043 | 0.65882 |
+| `submission_ft2.csv` | fine-tuned MiniLM + BoW + isotonic | 0.5399 | 0.51355 |
+| **`submission_ens.csv`** | **4 fine-tuned encoders + isotonic** | **0.5245** | **0.49893** |
+
+Everything needed to rebuild the submission without retraining is committed:
+`task2_model/audit/preds/` (per-model validation/test predictions plus
+`ensemble_params.json`) and `task2_model/audit/build_submission.py --apply`,
+which reproduces `submission_ens.csv` byte for byte. Full retraining commands,
+the label-noise evidence chain and the analysis are in
+[task2_model/audit/README.md](task2_model/audit/README.md),
+[task2_model/FINETUNE_RESULT.md](task2_model/FINETUNE_RESULT.md) and
+[task2_model/SOURCE_AND_LABEL_NOISE.md](task2_model/SOURCE_AND_LABEL_NOISE.md).
+
 ## Repository layout
 
 ```
@@ -28,6 +55,10 @@ Task2_Token_Dataset/    re-tokenised feature dataset
 Project.pdf             assignment specification
 runs/                   small training summaries / configs (checkpoints not committed)
 artifacts_v2/           KB-sized V2 overlay (only if the V2 features are built)
+colab/                  Colab launcher scripts (push / run / shell / stop)
+COLAB.md                how to run this project on a Colab runtime, step by step
+task2_model/audit/      leaderboard solution (0.49893): clean-label recovery,
+                        fine-tuning, ensembling + committed predictions
 ```
 
 ## Quick start
@@ -43,6 +74,24 @@ python task2_model/train.py --data artifacts --out runs/full --epochs 6
 
 See [task2_model/README.md](task2_model/README.md) for the full description,
 GPU setup, feature ablations and measured results.
+
+## Running on Colab (no Drive mount)
+
+The image already ships torch 2.11+cu130, pyarrow, scipy and numpy, so the Colab
+path skips the venv and the pip install entirely.  A T4 session is created,
+filled over the SSH tunnel, scored, and stopped again — about three minutes of
+wall clock and < 0.05 compute units for the whole validation split.
+
+```bash
+colab new -s work --gpu T4     # 1. start a session (~15 s)
+./colab/push.sh work           # 2. code + valid cache + checkpoint (~60 s, cached)
+./colab/run_valid.sh work      # 3. score 1.53 M validation rows (~35 s)
+./colab/stop.sh work           # 4. release the VM — this is what stops billing
+```
+
+Verified end to end: `val RMSE=1.1573 MAE=0.8646 rows=1,526,196`, identical to the
+published `runs/full3` number.  Full instructions, cost table and troubleshooting
+are in [COLAB.md](COLAB.md).
 
 ## Measured validation results (1,526,196 rows)
 

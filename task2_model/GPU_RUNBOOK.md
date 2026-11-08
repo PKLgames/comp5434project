@@ -80,6 +80,12 @@ now and keep it with the run outputs.
 
 ## Phase 2 — get the code **and** the data onto the box
 
+> **On a Colab runtime** this phase is replaced by `../colab/push.sh`: it streams
+> one tar (code + valid cache + checkpoint, 467 MB) through `colab ssh` and
+> verifies the remote tree, with no Drive mount and no Contents API. Phases 1 and
+> 5 are unnecessary there too — the image already ships torch/pyarrow/scipy, and
+> `../colab/run_valid.sh` reproduces the reference score. See `../COLAB.md`.
+
 `git clone` gives you the code, the tests and the small JSON summaries — and
 **not** the data or the checkpoints. Check what is deliberately excluded:
 
