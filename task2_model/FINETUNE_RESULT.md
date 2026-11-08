@@ -1,6 +1,7 @@
 # 最终方案与结果（2026-11-08）
 
 当前最好提交：**`submission_ens.csv` → 排行榜 RMSE 0.49893**（第 1 名 0.45700，差距 0.042）。
+两成员裁剪版 **`submission_pruned.csv` → 0.49914**（只差 0.0002，本机 CPU 推理 157 s vs 403 s）。
 
 ## 1. 成绩轨迹
 
@@ -12,7 +13,8 @@
 | `submission_iso.csv` | 词袋 + isotonic 校准 | 0.7043 | 0.65882 |
 | `submission_emb.csv` | 冻结 MiniLM 句向量 MLP + 词袋 + isotonic | 0.6789 | 0.61998 |
 | `submission_ft2.csv` | 微调 MiniLM（2 epoch, 337 万行）+ 词袋 + isotonic | 0.5399 | 0.51355 |
-| **`submission_ens.csv`** | **4 个微调模型加权 + isotonic** | **0.5245** | **0.49893** |
+| `submission_ens.csv` | 4 个微调模型加权 + isotonic | 0.5245 | 0.49893 |
+| **`submission_pruned.csv`** | **2 个微调模型（s1+b1, 0.33/0.67）+ isotonic** | **0.5255** | **0.49914** |
 
 验证→榜单偏移稳定在 −0.02 ~ −0.03（四次实测：−0.049 / −0.059 / +0.026 / −0.0256）。
 
@@ -48,6 +50,21 @@
 | s1+s2+d1+b1 最优加权 | 0.5276 |
 | + isotonic | **0.5245** |
 
+### 3.1 成员裁剪线（2 成员，已验证上线）
+
+| 组合 | 验证 RMSE（iso heldout） | 相对 4 成员 | 本机 CPU 推理 |
+|---|---:|---:|---:|
+| s1 单独 | 0.5377 | +0.0132 | — |
+| b1 单独 | 0.5271 | +0.0026 | — |
+| **s1 + b1（0.33 / 0.67）** | **0.5255** | **+0.0010** | **≈157 s** |
+| s1 + d1（0.5 / 0.5） | 0.5302 | +0.0057 | — |
+| 4 成员（现状） | 0.5245 | — | ≈403 s |
+
+- 上线结果：`submission_pruned.csv` → **0.49914**（4 成员 0.49893），差 0.0002，属噪声级别。
+- 权重只在验证集**偶数半区**上网格搜索（步长 0.01，w_s1=0.33），isotonic 同样在偶数半区拟合，
+  0.5255 是**奇数半区**（88,799 行）的分数，无泄漏。
+- 省时来源：去掉 s2（MiniLM seed 2）与 d1（distilbert），CPU 前向 379.99 s → 151.99 s。
+
 ## 4. 复现方式
 
 预测数组与集成参数已随仓库提交（`task2_model/audit/preds/`），**无需训练即可逐字节复现提交文件**：
@@ -57,6 +74,14 @@ cd task2_model/audit
 ../../.venv/bin/python build_submission.py --apply --tags s1 s2 d1 b1 \
     --params-in preds/ensemble_params.json --out submission_ens.csv
 # -> 与仓库中的 submission_ens.csv 完全一致（cmp 无差异）
+```
+
+两成员裁剪版：
+
+```bash
+cd task2_model/audit
+../../.venv/bin/python build_submission_pruned.py --out ../../submission_pruned.csv
+# -> 与仓库中的 submission_pruned.csv 完全一致
 ```
 
 完整重训流程见 `task2_model/audit/README.md`（数据获取、干净标签恢复、四组训练命令）。
