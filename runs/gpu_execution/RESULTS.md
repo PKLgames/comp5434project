@@ -1,5 +1,13 @@
 # GPU runbook execution results
 
+> **Checkpoints are not committed.** `runs/gpu_*/best.pt` (5 × ~230 MB) were
+> removed from the repository tip because they dominate a clone and are
+> reproducible: retrain with `task2_model/train.py` using the `args.json` next to
+> each summary, or restore them from history with
+> `git checkout 8a82faa -- runs/gpu_ord/best.pt` (etc.). The compact evidence
+> stays committed: `summary.json`, `args.json`, `comparison.json`,
+> `val_preds.npz` and `val_preds_metrics.json` per run.
+
 Code: 4e43dff7f82999b9fe0318bf11a2d7b0bc890dc7
 GPU: NVIDIA GeForce RTX 3060 Laptop GPU
 PyTorch: 2.6.0+cu124 / CUDA 12.4

@@ -17,6 +17,13 @@ reference inside the new environment first, then compare only within it.
 | 6 | method A / method B | ~10 min each | `compare.py` verdict |
 | 7 | decision, then optional ensemble | hours | ΔRMSE rule |
 
+> **Checkpoints are not part of the repository tip.** The commands below reference
+> `runs/gpu_*/best.pt`, which are ~230 MB each and were removed from the tip to
+> keep clones light. Retrain them with `train.py` (the `args.json` beside each
+> `summary.json` records the exact configuration), or restore one from history
+> with `git checkout 8a82faa -- runs/gpu_ord/best.pt`. The per-run JSON summaries,
+> comparison tables and `val_preds.npz` files stay committed.
+
 ---
 
 ## Phase 0 — device detection

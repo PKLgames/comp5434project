@@ -110,5 +110,5 @@ test preds n=10000 mean 4.240 sd 1.246
 | `train_sgd.py` / `train_sgd_clean.py` / `train_sgd_dense.py` | 哈希词袋线性基线 1.2029；在干净标签上重训更差；加数值特征更差 |
 | `eval_clean.py` / `calibrate_submission.py` | 校准评估：仿射 0.7515、isotonic 0.7043（词袋模型） |
 | `entity_bias_full.py` | 实体偏置特征最多只值 0.05 RMSE，且测试侧没有 id |
-| `encode_emb.py` / `bench_emb.py` / `compare_emb.py` | 冻结句向量路线 |
+| `encode_emb.py` | 冻结句向量路线（CPU 版：73 docs/s ⇒ 全量 29 h，已放弃，改用 Colab） |
 | `check_no_leakage.py` | 训练/验证/测试划分的泄漏审计 |
