@@ -28,7 +28,9 @@ Everything needed to rebuild the submission without retraining is committed:
 which reproduces `submission_ens.csv` byte for byte. Full retraining commands,
 the label-noise evidence chain and the analysis are in
 [task2_model/audit/README.md](task2_model/audit/README.md),
-[task2_model/FINETUNE_RESULT.md](task2_model/FINETUNE_RESULT.md) and
+[task2_model/FINETUNE_RESULT.md](task2_model/FINETUNE_RESULT.md),
+[task2_model/ENV_AND_TIMING.md](task2_model/ENV_AND_TIMING.md) (hardware, versions and
+every measured stage time) and
 [task2_model/SOURCE_AND_LABEL_NOISE.md](task2_model/SOURCE_AND_LABEL_NOISE.md).
 
 ## Repository layout

@@ -112,3 +112,4 @@ test preds n=10000 mean 4.240 sd 1.246
 | `entity_bias_full.py` | 实体偏置特征最多只值 0.05 RMSE，且测试侧没有 id |
 | `encode_emb.py` | 冻结句向量路线（CPU 版：73 docs/s ⇒ 全量 29 h，已放弃，改用 Colab） |
 | `check_no_leakage.py` | 训练/验证/测试划分的泄漏审计 |
+| `measure_pipeline.py` | 对「10,000 条测试文本 → 提交 CSV」的新鲜推理逐阶段计时（含环境快照），结果写入 `ENV_AND_TIMING.md` §7 |

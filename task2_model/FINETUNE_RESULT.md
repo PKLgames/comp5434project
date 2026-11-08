@@ -71,6 +71,11 @@ cd task2_model/audit
 
 H100 与 A100：账号无权限（`Backend rejected accelerator`）；L4 最省 CU，G4 最快（快 3.4 倍、贵 5 倍）。
 
+逐模型的环境（GPU 型号/显存/核数/内存）、版本、训练与预处理耗时、集成校准耗时、
+以及**尚未实测**的项（逐轮耗时、Colab 的 Python/transformers 版本、新鲜测试推理耗时）
+都记在 [ENV_AND_TIMING.md](ENV_AND_TIMING.md)；新鲜推理的测量脚本是
+[audit/measure_pipeline.py](audit/measure_pipeline.py)。
+
 ## 6. 踩过的坑
 
 1. **推理读错文件**：`ft.py` 用 `train_text.parquet` 的前 1 万行当测试输入 → 排行榜 1.79。测试侧必须用 `test_text.parquet`（由 `test.csv` 构造）。
