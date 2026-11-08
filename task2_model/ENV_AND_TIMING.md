@@ -100,37 +100,68 @@
 - **跨会话 wall clock 约 6–7 h**。
 - **训练是否并行：没有**。四个模型顺序训练，任一时刻只有一个模型在跑（s1 在 L4 会话；s2 在 G4-a；d1、b1 在 G4-b 依次执行）。
 
-## 7. 完整测试推理耗时（10,000 条文本 → 提交 CSV）
+## 7. 完整测试推理耗时（10,000 条 → 提交 CSV）
 
-**状态：未整体实测**（4 个真实 checkpoint 未下载、会话已销毁）。但**没有 GPU 也能测的环节已在本机实测**，
-GPU 前向部分可由 L4 上实测的编码吞吐推导，因此现在能给出分项表而不是单一猜测：
+### 7.1 交付版 full3（权重在位，本机 CPU 端到端实测，10,000 行）
 
-| 环节 | 数值 | 类型 |
-| --- | ---: | --- |
-| 读 `test_text.parquet`（10k 行） | **0.085 s** | 本机实测 |
-| Arrow 列转 Python list | **0.003 s** | 本机实测 |
-| CPU 分词 10k 条（maxlen 96, bs 512） | **0.925 s** | 本机实测（10,816 docs/s） |
-| CPU 分词 10k 条（maxlen 128, bs 768） | **0.990 s** | 本机实测（10,100 docs/s） |
-| 前向 s1（MiniLM, ml 96, bs 512） | **≈1.63 s** | L4 实测吞吐 6,122 docs/s 推导 |
-| 前向 s2（MiniLM, ml 128, bs 1024） | **≈1.86 s** | L4 5,369 docs/s（ml128）推导 |
-| 前向 d1（distilbert, ml 128, bs 768） | **≈1.85 s** | 同上推导 |
-| 前向 b1（bge-small, ml 128, bs 768） | **≈1.86 s** | 同上推导 |
-| 4 个权重加载（90.9 / 90.9 / 265 / 133 MB） | **10–20 s** | 估算（磁盘加载，未测） |
-| 融合 + isotonic + 写 CSV | **≈0.2 s** | 本机实测（含 npz 读取时为 1.5 s） |
-| **合计（L4）** | **≈18–28 s** | 推导 |
-| **合计（G4，前向约快 2–3×）** | **≈12–18 s** | 推导 |
+| 阶段 | 命令 | 实测 |
+| --- | --- | ---: |
+| 测试特征转换（复用 artifacts 词表/IDF） | `preprocess.py --test-dir test_features_with_entity --reuse artifacts` | **0.442 s** |
+| 前向 + 写 CSV | `predict.py --split test --checkpoint runs/full3/best.pt` | **2.733 s** |
+| **合计（10,000 行 → submission CSV）** | | **3.175 s** |
 
-- 上面「分词」与「前向」在真实代码里是**同一个循环**（`tok(...)` 在计时范围内），所以总量取前向那一列即可，分词单列仅用于核对 CPU 侧开销。
-- 实测的 L4 编码吞吐有两组：**6,122–8,782 docs/s**（`bench_encode.py`，文本已在内存，bs/ml 扫描）与 **3,671 docs/s**（`run3.py` 的分块编码，含 `to_pylist`/slice 开销）。上表取前者算前向，取后者算下界：按 3,671 docs/s，单模型 10k ≈ 2.7 s，4 模型 ≈ 11 s，合计 ≈ 22–32 s。
-- 若把权重下载也算进去（每模型 90–265 MB、HF CDN 24 MB/s），首次运行再加 15–30 s。
+这是目前仓库里**唯一能端到端复测**的推理链路；`wc -l` 校验输出为 10,001 行（表头 + 10,000 条）。
+
+### 7.2 最终版（4 成员微调集成）
+
+4 个 `ft3_*.pt`（90.9 / 90.9 / 265 / 133 MB）随 Colab 会话销毁、未下载，整链无法复测。
+改为**实测单成员完整推理**（相同架构、相同序列长度；微调头只是 384→1 的线性层，成本可忽略），
+再乘成员数并加上融合阶段：
+
+| 阶段（CPU 16 线程，10k 条，maxlen 96，bs 256） | 实测 |
+| --- | ---: |
+| 读 `test_text.parquet`（10k 行） | **0.052 s** |
+| 加载 tokenizer | **0.797 s** |
+| 加载模型权重（MiniLM 384 维） | **0.564 s** |
+| 分词 10k 条 | **0.876 s** |
+| 前向 10k 条（按长度排序分桶） | **43.529 s**（229.7 docs/s） |
+| **单成员合计** | **45.819 s** |
+
+| 组合 | 计算方式 | 结果 | 类型 |
+| --- | --- | ---: | --- |
+| 四成员 · 本机 CPU | 4×43.5 前向 + ≈5.4 加载/分词 + 1.5 融合 | **≈181 s** | 实测外推 |
+| 四成员 · L4 | 前向 6,122–5,369 docs/s ⇒ 1.6–1.9 s/成员 + 权重加载 10–20 s | **18–28 s** | 吞吐推导 |
+| 四成员 · G4 | 前向约快 2–3× | **12–18 s** | 吞吐推导 |
+
+- GPU 前向数来自 `bench_encode.py` 在 L4 上的实测吞吐；CPU 单成员为本次实测（229.7 docs/s，与早先 `bench_emb.py` 的 226 docs/s 一致）。
+- 融合 + isotonic + 写盘：本机实测 **1.5 s**（含 npz 读取），纯计算约 0.2 s。
+- 首次运行若需从 HF 下载权重（每模型 90–265 MB，24 MB/s），再加 15–30 s。
+- 若把真实 checkpoint 之一上传回本机，`audit/measure_pipeline.py` 可按同一分段重跑并直接打印 TOTAL。
 
 ## 8. 如何补齐仍缺的项
 
 1. **云端 CPU 型号**：下一次会话首条命令 `lscpu | grep -i 'model name'`（或 `cat /proc/cpuinfo`），30 s 成本；
-2. **新鲜推理整体耗时**：`task2_model/audit/measure_pipeline.py` 已按阶段计时（`env_capture → 读 parquet → 每模型 load_tokenizer / load_model+weights / tokenize_10k / forward_10k → 融合+校准+写盘 → TOTAL`），需 4 个 checkpoint 在位才能跑通；
+2. **新鲜推理整体耗时**：已在本机实测单成员与交付版链路（见 §7）；若要严格复测四成员整链，需把任一 `ft3_*.pt` 传回本机后跑 `task2_model/audit/measure_pipeline.py`；
 3. **transformers 精确版本**：在 `ft3.py` 开头加 `print(sys.version, torch.__version__, transformers.__version__)`，下次训练自动留下。
 
 > 结论：环境（GPU 型号/显存/核数/内存）、版本（Python 3.13、torch 2.14.1+cu130、transformers 5.x）、
 > 训练总量与逐轮推导、预处理、集成校准、全流程总量都有实测或可校验的推导；
-> 仍缺的是**云端 CPU 型号**（日志无、只能下次 `lscpu`）、**transformers 精确小版本**（只到 5.x），
-> 以及**整条新鲜推理链路的端到端实测**（分项已给出，合计 18–28 s 为推导值）。
+> **测试集推理已有实测**：交付版 full3 端到端 10,000 行 = **3.175 s**（CPU），最终版单成员 = **45.819 s**（CPU，229.7 docs/s），
+> 四成员在 L4 / G4 上按实测吞吐推导为 18–28 s / 12–18 s。
+> 仍缺的只有：**云端 CPU 型号**（日志无、只能下次 `lscpu`）与 **transformers 精确小版本**（只到 5.x）。
+
+## 9. 待办（未执行，用户要求保留）
+
+**仓库瘦身**：把 `comp5434project/` 从 14 GB 压到约 27 MB（仅保留模型相关文件），删除清单已核对：
+
+| 目录 | 大小 | 说明 |
+| --- | ---: | --- |
+| `Task2_Token_Dataset/` | 2.1 GB | Part-A 的 hashed 特征缓存，可重新生成 |
+| `Task2_OriginData/` | 2.2 GB | Part-A 中间产物（entity_statistics 等） |
+| `runs/`（除 `gpu_execution/`） | 2.0 GB | 旧版 61M 参数 checkpoint（8 个 × ~240 MB） |
+| `Dataset2_metadata/` | 1.9 GB | 竞赛原始 CSV（已 gitignore，用时再下载） |
+| `colab/.cache/` | 467 MB | 上传缓存 |
+| `.git/`（含 LFS 1.3 GB） | 1.3 GB | 历史与 LFS 对象，可 `git gc` / 重建仓库 |
+
+保留：`task2_model/`（含 `audit/preds/` 26 MB）、`submission_ens.csv`、`test_features_with_entity/`。
+执行前需逐项确认，删除会破坏历史复现路径（旧 checkpoint 需从 commit `8a82faa` 取回）。
