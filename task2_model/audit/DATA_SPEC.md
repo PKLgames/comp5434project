@@ -37,8 +37,10 @@
 - `votes`：非负整数，max 23,446；**唯一例外是 1 行 `votes = -1`**
   —— `id = 1862497`（title `It's my favorite`，energy drink 评论）。Part A 的 `votes_invalid`
   就是给这行准备的标记。下游对 `votes` 只做 `votes_log = log1p(max(votes,0))`，所以 -1 不会炸。
-- `title` / `comment`：UTF-8，可含换行与逗号（CSV 已正确加引号）。空 `comment` 13,205 行，
-  空 `title` 6,711 行；下游 `comment_missing` / `title_missing` 就是这两个标记。
+- `title` / `comment`：UTF-8，可含换行与逗号（CSV 已正确加引号）。实测：`title` 去空白后
+  **没有空值**（0 行）；`comment` 去空白后为空 **9,046 行**（0.118 %）。另外约 13.2k 行（0.17 %）
+  的 `comment` 不含任何字母数字字符（只有标点/表情），哈希词袋后为 0 个 token。
+  下游 `comment_missing` / `title_missing` 覆盖的正是空白文本这一类。
 
 ## 3. 文本拼接标准（`build_text.py` 的公式）
 
