@@ -1,6 +1,12 @@
 # 最终方案与结果（2026-11-08）
 
 当前最好提交：**`submission_ens.csv` → 排行榜 RMSE 0.49893**（第 1 名 0.45700，差距 0.042）。
+
+> **输入数据标准与校对**：模型消费的每个文件（两个 CSV、`train_text/test_text.parquet`、
+> `clean_y.npz`）的列、dtype、行数、文本拼接公式、验证集划分（`id % 40 == 0`）与干净标签口径
+> 见 [`audit/DATA_SPEC.md`](audit/DATA_SPEC.md)；一键校对：`python audit/check_data.py --train-csv
+> ../Dataset2_metadata/train.csv --test-csv ../Dataset2_metadata/test.csv --clean
+> audit/preds/clean_y.npz --preds-dir audit/preds`（期望 `ALL CHECKS PASSED`）。
 两成员裁剪版 **`submission_pruned.csv` → 0.49914**（只差 0.0002，本机 CPU 推理 157 s vs 403 s）。
 
 ## 1. 成绩轨迹

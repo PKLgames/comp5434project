@@ -2,6 +2,13 @@
 
 这个目录是最终提交 `submission_ens.csv` 的完整来源。目标：**从公开数据 + 本目录脚本，复现排行榜 0.49893 的提交文件**。
 
+> **输入数据标准（先读这个）**：[`DATA_SPEC.md`](DATA_SPEC.md) 定义了模型实际消费的每个文件的
+> 列名、dtype、行数、`text = title + ". " + comment` 拼接、`id % 40 == 0` 划分、干净标签
+> 口径（覆盖 92.50% / 一致 80.01% / p=0.25）以及 1 行 `votes = -1` 的哨兵值。
+> **校对方法**：`python check_data.py --train-csv ... --test-csv ... --clean ... --preds-dir ...`
+> 期望最后一行 `ALL CHECKS PASSED`；提交格式用 `check_submission.py`，可复现性用
+> `build_submission.py --apply` + `cmp`。
+
 目录内容：
 
 | 文件 | 作用 |
@@ -15,6 +22,8 @@
 | `preds/ftvids_s1.npy` | 验证切片的 id 数组（各 tag 共用） |
 | `preds/clean_y.npz` | 干净标签：`cy`（干净 1–5）、`matched`（是否匹配到源）、`ag`（交付标签） |
 | `preds/ensemble_params.json` | 集成权重 + isotonic 断点，用于逐字节复现最佳提交 |
+| `DATA_SPEC.md` | **输入数据标准与校对方法**（列名/dtype/行数/文本拼接/划分/标签口径/哨兵值） |
+| `check_data.py` | 输入契约检查器：列名、行数、id 连续、取值域、标签统计、预测长度，秒级 PASS/FAIL |
 | `SOURCE_AND_LABEL_NOISE.md` | 标签噪声的完整证据链（在哪一层、如何恢复、下界推导） |
 | `FINETUNE_RESULT.md` | 成绩轨迹、模型阵容、算力实测、踩坑记录 |
 
