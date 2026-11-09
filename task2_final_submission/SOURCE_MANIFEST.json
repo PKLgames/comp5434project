@@ -1,0 +1,305 @@
+{
+  "repository": "https://github.com/PKLgames/comp5434project",
+  "pinned_commit": "261e9e648cc0b1080fae0fe192f9ab1fa7635946",
+  "remote_files": [
+    {
+      "repository_path": "task2_model/audit/build_submission_pruned.py",
+      "destination": "final_model/build_submission_pruned.py",
+      "git_blob_sha1": "121d8e9d3d45f1503aca913b87b45b93ef7aaeac",
+      "sha256": "dcc7fa68c32ec764107d29e392ecf97a121173ffbd0f3c2f8b431142e5629cbc"
+    },
+    {
+      "repository_path": "task2_model/audit/preds/ensemble_params_pruned.json",
+      "destination": "final_model/preds/ensemble_params_pruned.json",
+      "git_blob_sha1": "03e26f91eccdf5dd4344f4a81bce39239a05bc2e",
+      "sha256": "016cf7d336d392f1cc7a5ad43e55c4dcc3d2f839b0744d36346b451da3c5b883"
+    },
+    {
+      "repository_path": "task2_model/ENV_AND_TIMING.md",
+      "destination": "docs/ENV_AND_TIMING.md",
+      "git_blob_sha1": "808dcf93ce19abd9645fe7e9809a8d7696568d03",
+      "sha256": "9466f00726d37fc6b1f6b0832d5de947116771628b73bc1850c3d7b01e5e5718"
+    },
+    {
+      "repository_path": "task2_model/FINETUNE_RESULT.md",
+      "destination": "docs/FINETUNE_RESULT.md",
+      "git_blob_sha1": "aa50d34a526c089019caefa2a7873914fbf04045",
+      "sha256": "4c23038d7ceafb5d4c9cf19996df352e76b78b8730008a0e7e7e3d59d62b3c3c"
+    },
+    {
+      "repository_path": "submission_pruned.csv",
+      "destination": "reference/submission_pruned.csv",
+      "sha256": "071b8200d58d6f96f017a50b75cde191d2103c97a16920026e5365c5d1f9b232"
+    }
+  ],
+  "local_sources": {
+    "submit_code/SOURCE_MANIFEST.json": {
+      "remote_commit": "22e9bef8b5ab115ac77599da8dd6543bfd6a17c2",
+      "remote_source_sha256": {
+        "build_submission.py": "53a881a7ee041f0db12239e4ebe6742a1d9e54958ef166987f682cc8da8aef16",
+        "build_text.py": "cda0384ef65691b3ecd962514db1806c86c8a4349d4922e6d816360157e68692",
+        "ft3.py": "a28cb17d9cf5cca1c1d8160724780e7672585a5ea3fdb183695fea3dc1dcca7a",
+        "measure_pipeline.py": "9b7b60fd6b6f2f94aa3879df2a7809222081c5f530a0dbda3248bcf7b707c03c",
+        "recover_clean_labels.py": "f1155f417d574fa81b3e0e2d43af9ec5a7711a17c696e545cffe6ce9d013965f"
+      },
+      "local_source_sha256": {
+        "spark_experiments/analyze_data.py": "0c449a86b433fac4d9a76f27d14b8c6ecdfa9567867519cf3c537b3a76227c95",
+        "spark_experiments/clean_data.py": "aa3f8906b4b430aa38ac4b4c44f2871cc35428e98342273416ef85d8dcac06a6",
+        "spark_experiments/split_train.py": "4c585aa69169fbb7216aafd89357bbfd4a2d385302e034c495c9d306edcd9e78",
+        "spark_experiments/feature_processing.py": "b5e898dced80726524160946e1cc0d44c90830d86177c9af2e6b40630fecd518",
+        "spark_experiments/text_vectorization_old.py": "1fca43e4b867959053461da1792edf8085a7fbc9186b927bccd0b3678436ca12",
+        "spark_experiments/text_vectorization.py": "98cd888178b89a84fbfc31718b4536b13a0e8158f91dddb73038b36bda2e5800",
+        "spark_experiments/entity_features.py": "05a72cfc88658a5378675b0450ee235340e819482bf561ef360c66d95e67d2b4",
+        "spark_experiments/parallel_benchmark.py": "5c00b1a51c5041b2a30978c91d05bd5db3f2218ffa6a9b7f385bfe4544fd1c60",
+        "baseline_model/common.py": "86023df4b82a3cc0b822fd4298c7c40436479b4dd1bc195e8e0cd4af30144d35",
+        "baseline_model/dataset.py": "d3fe0a85bfdf3da8604475263f641ba077c43e4aa8d604d704342cc1b22e7d7d",
+        "baseline_model/features_v2.py": "dee9fa91f8143f6aa5798a43bac13292f1d1359e4a937affea49bcf994d179fe",
+        "baseline_model/model.py": "2b3d45b33774a797b2294102b08c96663a54a4ba77484e493ce92e077276b45b",
+        "baseline_model/preprocess.py": "2b8c2c1c382a2cd4ea5f3971e0b30a82580434eda500468f6888a53569749098",
+        "baseline_model/train.py": "59b84eddae955f43f16d827ad193b10019b8380934f4d1ba0956557c6f4ffb28"
+      },
+      "packaging_changes": "See README section 5. Only packaged copies were modified. No training, cleaning or inference was run.",
+      "incoming_package": {
+        "directory": "comp5434project_submission",
+        "source_sha256": {
+          "build_submission.py": "53a881a7ee041f0db12239e4ebe6742a1d9e54958ef166987f682cc8da8aef16",
+          "build_text.py": "43c8c16324fef96d81ece27bea12c9015aaad0d992bc274ad5330407238bbda6",
+          "check_submission.py": "33185235b261a73453eec49c50330ff1c6abdc15665ee97043b092c01712f45e",
+          "download_data.py": "c146898459eade8fefa39b25476a62efe3764ca9f99152079313060e33685fe3",
+          "EXPERIMENTS.md": "387260e737d3f8f3d6c3e96b7001d6bd44d6fa46fd06a670474fe387bb4519e4",
+          "finetune.py": "6cd74a29d499ca6b0866624db2d2a97aaa763ab085736413a11d18612c93409a",
+          "measure_pipeline.py": "cf65bfc42799834e8d9d08a165c20b578739ceef0659e0f93acb76f29823a443",
+          "predict_fresh.py": "e11eec82a55cd74a8d23548978b019d934b55f65fc26c68ae68c09552c6bec7f",
+          "README.md": "a6746648ef95a6ba157229c4ce803e78cfaea32dfa88e2e243e86d8003ec244b",
+          "recover_clean_labels.py": "1453601d11f06bbe3b1987956242a5601ae710d075cd2672da5cdcbcf106c471",
+          "requirements.txt": "77289663ad0abdd8ef0eb6dd23e3711a07f0a6a366d6b33ee7ae02392b38e25c",
+          "run_all.sh": "4d11a968047dfabec0c0db743e00dcb1c4da78c25bd6588b456698d2b81cfbc9",
+          "sampleSubmission.csv": "b9d5447a554b44677580484024017acbaf840657962bb4cfc1d7b98a2c216254",
+          "submission.csv": "aae3ab32d224ecadcdda27418203481cb5960c485a3227f67dfb4e9bb50ed541",
+          "preds/clean_y.npz": "5c133167aceb845de1612af7a3555910934fb934736731a8b3f3a426667dee6f",
+          "preds/ensemble_params.json": "d3362c89013bfc8342d5bc6d8a9580bf8c7ab55fb5a5d8d58b3949d9174ff26e",
+          "preds/ftp_b1.npy": "2bd7f5825f06abb54f0df3548284364cb8cd4bccdab1cf08df03227880a80a5a",
+          "preds/ftp_d1.npy": "00c6395ea7c86fc536da139bbf1d4e3a9fca4030b72482f283b29b84dd4f8536",
+          "preds/ftp_s1.npy": "81b3b6d49a342aca17dce2d750f8dab7025974d17074e01b5bc15bddfd2f42cd",
+          "preds/ftp_s2.npy": "c3cc0e591650dfba791488125257aa5af01b7c58793560ca16fef291962ea0e1",
+          "preds/ftvids_s1.npy": "96bc9b8a7057536657c556c1b16b2f0e1f36c9dd08737e0e5a7061db56490baa",
+          "preds/ftv_b1.npy": "8e3ed808439196ee28fb20abdfb1e90c77fd84ebe13af7cafdb4d816333710f7",
+          "preds/ftv_d1.npy": "1ae8c1c872408e711b02afede21ce3b0336bf4b049f3f6d64687fc5d6e8dad36",
+          "preds/ftv_s1.npy": "cd58ae974eda04def60a2e8b5637ee9ca713c236febab7ac1ff80c10e88d7e57",
+          "preds/ftv_s2.npy": "413d90ae70d8a3a322a431d42a3d49fbb17cb89061bdfc21460102953fc51603"
+        }
+      },
+      "integration": {
+        "canonical_trainer": "final_model/finetune.py, adapted from supplied package",
+        "d1_b1_seed": 1,
+        "artifact_comparison": "All four test arrays and ensemble parameters are byte-identical across both packages",
+        "preserved_reference": "reference/submission.csv",
+        "notes": "Single submission builder and fresh-inference timer retained. Full source-label array replaced by lossless validation-only slice for saved validation evaluation.",
+        "verification": {
+          "syntax_and_local_import_closure": "passed",
+          "saved_artifact_equality": "four test arrays and ensemble parameters match both original packages",
+          "compact_validation_labels": "exactly equal to original labels indexed by saved validation IDs",
+          "archived_array_reconstruction": "in-memory piecewise-linear calibration and CSV bytes match supplied reference",
+          "reference_submission_sha256": "aae3ab32d224ecadcdda27418203481cb5960c485a3227f67dfb4e9bb50ed541",
+          "runtime_model_tests": "not run; no training or neural inference executed"
+        }
+      }
+    }
+  },
+  "packaging_changes": [
+    "Portable data/output paths",
+    "Spark preprocessing replaces the older text-only builder in the main pipeline",
+    "One trainer and one fresh-inference entry point",
+    "Two-member pruning support",
+    "Published full label hash pinned; recovered archives have an explicit origin flag",
+    "Shared four-/two-member apply rules; both reference CSVs included",
+    "Source recovery accepts multiline CSV records and ignores unfilled array capacity",
+    "Training and inference timing summary entry point",
+    "Archive files and source datasets not modified"
+  ],
+  "spark_preprocessing_sources": [
+    {
+      "path": "spark_preprocessing/01_check_inputs.py",
+      "sha256_before_packaging": "02a0b2915aab9df40ea02873c7d67b092711a9443c657c6513badaceeeabb4a8"
+    },
+    {
+      "path": "spark_preprocessing/02_prepare_inputs.py",
+      "sha256_before_packaging": "112a48b3a0b416167a4372353ce41bcf078ef4fc8d83c97cf9fd5ebbe58c42a8"
+    },
+    {
+      "path": "spark_preprocessing/03_check_spark.py",
+      "sha256_before_packaging": "3b35825e6156995f352bf1ef9c55690728986803cb824fd202458aa0fafa7940"
+    },
+    {
+      "path": "spark_preprocessing/04_preprocess_full.py",
+      "sha256_before_packaging": "0e75685995c78727ce09769ca0acab50981c8cc9ed3cbb531e73ea1b533b266b"
+    }
+  ],
+  "previous_package_files": [
+    {
+      "path": "final_model/build_submission.py",
+      "previous_package_sha256": "897714fdf9b17b96d84576c6905707381c8269866b52821b1d933ed57fec4439",
+      "adapted": true
+    },
+    {
+      "path": "final_model/check_submission.py",
+      "previous_package_sha256": "b0675156953bd0a672c0eac3ba5a89688503721d117d475a0360ebd4b8e99e5a",
+      "adapted": false
+    },
+    {
+      "path": "final_model/evaluate_saved.py",
+      "previous_package_sha256": "88681feaff9c260a38789c24babbb3a34d26ebf38e027696a37fa103d7b3ba2c",
+      "adapted": true
+    },
+    {
+      "path": "final_model/finetune.py",
+      "previous_package_sha256": "eec6fe11729fb65214a104cf426ee90588cc1cb01df3e3aaf15d96734c85a32b",
+      "adapted": true
+    },
+    {
+      "path": "final_model/measure_pipeline.py",
+      "previous_package_sha256": "c82aeb547a77c95eaf7342d8ffbfd340b46996fbbdef0bcd0e385ab07928595c",
+      "adapted": true
+    },
+    {
+      "path": "final_model/preds/ensemble_params.json",
+      "previous_package_sha256": "d3362c89013bfc8342d5bc6d8a9580bf8c7ab55fb5a5d8d58b3949d9174ff26e",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftp_b1.npy",
+      "previous_package_sha256": "2bd7f5825f06abb54f0df3548284364cb8cd4bccdab1cf08df03227880a80a5a",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftp_d1.npy",
+      "previous_package_sha256": "00c6395ea7c86fc536da139bbf1d4e3a9fca4030b72482f283b29b84dd4f8536",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftp_s1.npy",
+      "previous_package_sha256": "81b3b6d49a342aca17dce2d750f8dab7025974d17074e01b5bc15bddfd2f42cd",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftp_s2.npy",
+      "previous_package_sha256": "c3cc0e591650dfba791488125257aa5af01b7c58793560ca16fef291962ea0e1",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftv_b1.npy",
+      "previous_package_sha256": "8e3ed808439196ee28fb20abdfb1e90c77fd84ebe13af7cafdb4d816333710f7",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftv_d1.npy",
+      "previous_package_sha256": "1ae8c1c872408e711b02afede21ce3b0336bf4b049f3f6d64687fc5d6e8dad36",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftv_s1.npy",
+      "previous_package_sha256": "cd58ae974eda04def60a2e8b5637ee9ca713c236febab7ac1ff80c10e88d7e57",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftv_s2.npy",
+      "previous_package_sha256": "413d90ae70d8a3a322a431d42a3d49fbb17cb89061bdfc21460102953fc51603",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/ftvids_s1.npy",
+      "previous_package_sha256": "96bc9b8a7057536657c556c1b16b2f0e1f36c9dd08737e0e5a7061db56490baa",
+      "adapted": false
+    },
+    {
+      "path": "final_model/preds/validation_labels.npz",
+      "previous_package_sha256": "dbba6f65cf5acb326e5f6d807638e4de13ecb0e59201eaf0dd9971ad7b30d0d3",
+      "adapted": false
+    },
+    {
+      "path": "final_model/recover_clean_labels.py",
+      "previous_package_sha256": "73b76f216eee347acc52c7d805d98c655f0a7cfe5e8cba1b1a845b1c7a3b0ba9",
+      "adapted": true
+    },
+    {
+      "path": "spark_experiments/analyze_data.py",
+      "previous_package_sha256": "a4379996312f8ee3ed63820ff76e9e5cf8f52cee7afeeb2f4c56402d231dbe60",
+      "adapted": true
+    },
+    {
+      "path": "spark_experiments/clean_data.py",
+      "previous_package_sha256": "27e72d58655d392bb97610cc20252783d421b95d18302d1a6f7b5b29682dfdcd",
+      "adapted": true
+    },
+    {
+      "path": "spark_experiments/entity_features.py",
+      "previous_package_sha256": "05a72cfc88658a5378675b0450ee235340e819482bf561ef360c66d95e67d2b4",
+      "adapted": false
+    },
+    {
+      "path": "spark_experiments/feature_processing.py",
+      "previous_package_sha256": "b5e898dced80726524160946e1cc0d44c90830d86177c9af2e6b40630fecd518",
+      "adapted": false
+    },
+    {
+      "path": "spark_experiments/parallel_benchmark.py",
+      "previous_package_sha256": "5c00b1a51c5041b2a30978c91d05bd5db3f2218ffa6a9b7f385bfe4544fd1c60",
+      "adapted": false
+    },
+    {
+      "path": "spark_experiments/split_train.py",
+      "previous_package_sha256": "4c585aa69169fbb7216aafd89357bbfd4a2d385302e034c495c9d306edcd9e78",
+      "adapted": false
+    },
+    {
+      "path": "spark_experiments/text_vectorization.py",
+      "previous_package_sha256": "98cd888178b89a84fbfc31718b4536b13a0e8158f91dddb73038b36bda2e5800",
+      "adapted": false
+    },
+    {
+      "path": "spark_experiments/text_vectorization_old.py",
+      "previous_package_sha256": "1fca43e4b867959053461da1792edf8085a7fbc9186b927bccd0b3678436ca12",
+      "adapted": false
+    },
+    {
+      "path": "baseline_model/common.py",
+      "previous_package_sha256": "86023df4b82a3cc0b822fd4298c7c40436479b4dd1bc195e8e0cd4af30144d35",
+      "adapted": false
+    },
+    {
+      "path": "baseline_model/dataset.py",
+      "previous_package_sha256": "d3fe0a85bfdf3da8604475263f641ba077c43e4aa8d604d704342cc1b22e7d7d",
+      "adapted": false
+    },
+    {
+      "path": "baseline_model/features_v2.py",
+      "previous_package_sha256": "dee9fa91f8143f6aa5798a43bac13292f1d1359e4a937affea49bcf994d179fe",
+      "adapted": false
+    },
+    {
+      "path": "baseline_model/model.py",
+      "previous_package_sha256": "2b3d45b33774a797b2294102b08c96663a54a4ba77484e493ce92e077276b45b",
+      "adapted": false
+    },
+    {
+      "path": "baseline_model/preprocess.py",
+      "previous_package_sha256": "2b8c2c1c382a2cd4ea5f3971e0b30a82580434eda500468f6888a53569749098",
+      "adapted": false
+    },
+    {
+      "path": "baseline_model/train.py",
+      "previous_package_sha256": "59b84eddae955f43f16d827ad193b10019b8380934f4d1ba0956557c6f4ffb28",
+      "adapted": false
+    },
+    {
+      "path": "reference/sampleSubmission.csv",
+      "previous_package_sha256": "b9d5447a554b44677580484024017acbaf840657962bb4cfc1d7b98a2c216254",
+      "adapted": false
+    },
+    {
+      "path": "reference/submission.csv",
+      "previous_package_sha256": "aae3ab32d224ecadcdda27418203481cb5960c485a3227f67dfb4e9bb50ed541",
+      "adapted": false
+    }
+  ]
+}

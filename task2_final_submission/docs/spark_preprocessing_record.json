@@ -1,0 +1,137 @@
+{
+  "status": "SPARK_FULL_PREPROCESSING_PASS",
+  "input_stamps": {
+    "train.csv": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\train.csv",
+      "bytes": 1999999823,
+      "mtime_ns": 1792572230159368400
+    },
+    "test.csv": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\test.csv",
+      "bytes": 2587013,
+      "mtime_ns": 1792572190155144000
+    },
+    "sampleSubmission.csv": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\sampleSubmission.csv",
+      "bytes": 78899,
+      "mtime_ns": 1792572190067778900
+    },
+    "clean_y.npz": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\spark_preprocessing\\input\\clean_y.npz",
+      "bytes": 23054675,
+      "mtime_ns": 1794196421060829000
+    }
+  },
+  "label_source_commit": "261e9e648cc0b1080fae0fe192f9ab1fa7635946",
+  "source_label_sha256": "5c133167aceb845de1612af7a3555910934fb934736731a8b3f3a426667dee6f",
+  "spark": {
+    "version": "4.0.1",
+    "master": "local[4]",
+    "driver_memory": "4g",
+    "shuffle_partitions": 32
+  },
+  "environment": {
+    "python": "3.11.8 (tags/v3.11.8:db85d51, Feb  6 2024, 22:03:32) [MSC v.1937 64 bit (AMD64)]",
+    "numpy": "2.4.6",
+    "pyarrow": "26.0.1",
+    "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "logical_cpus": 20,
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "train_audit": {
+    "rows": 7684645,
+    "min_id": 0,
+    "max_id": 7684644,
+    "invalid_ids": 0,
+    "null_texts": 0,
+    "missing_label_links": 0,
+    "invalid_delivered_ratings": 0,
+    "csv_vs_archive_rating_mismatches": 0,
+    "validation_rows": 192117,
+    "matched_rows": 7108463,
+    "matched_validation_rows": 177607,
+    "eligible_training_rows": 6930856
+  },
+  "test_audit": {
+    "rows": 10000,
+    "min_id": 0,
+    "max_id": 9999,
+    "invalid_rows": 0
+  },
+  "full_text_audits": {
+    "train": {
+      "rows_compared": 7684645,
+      "all_text_equal_by_id": true,
+      "reference": "Independent PyArrow CSV reader and exact title + separator + comment expression",
+      "null_whitespace_case_and_newlines_preserved": true
+    },
+    "test": {
+      "rows_compared": 10000,
+      "all_text_equal_by_id": true,
+      "reference": "Independent PyArrow CSV reader and exact title + separator + comment expression",
+      "null_whitespace_case_and_newlines_preserved": true
+    }
+  },
+  "model_input_files": {
+    "train_text": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\spark_preprocessing\\output\\spark_full_20261109_120930_513308\\train_text.parquet",
+      "rows": 7684645,
+      "bytes": 625448796,
+      "schema": "id: int64\ntext: string not null",
+      "all_ids_sequential_unique": true
+    },
+    "labels_by_id": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\spark_preprocessing\\output\\spark_full_20261109_120930_513308\\labels_by_id.parquet",
+      "rows": 7684645,
+      "bytes": 27203664,
+      "schema": "id: int64\ncy: int8\nmatched: bool\nag: int8",
+      "all_ids_sequential_unique": true
+    },
+    "clean_y": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\spark_preprocessing\\output\\spark_full_20261109_120930_513308\\clean_y.npz",
+      "rows": 7684645,
+      "bytes": 23054675,
+      "all_arrays_equal_verified_source": true
+    },
+    "test_text": {
+      "path": "C:\\Users\\Administrator\\Desktop\\DS\\big data\\comp-5434-20261-project-task-2\\spark_preprocessing\\output\\spark_full_20261109_120930_513308\\test_text.parquet",
+      "rows": 10000,
+      "bytes": 835329,
+      "schema": "id: int64\ntext: string not null",
+      "all_ids_sequential_unique": true
+    }
+  },
+  "stage_seconds": {
+    "source_label_bridge_seconds": 0.9326242999959504,
+    "spark_startup_seconds": 4.2522681999980705,
+    "spark_train_read_text_join_materialize_audit_seconds": 30.193300900005852,
+    "spark_train_text_write_and_package_seconds": 18.792241799994372,
+    "spark_label_write_and_package_seconds": 6.111127600001055,
+    "model_npz_export_and_full_label_equivalence_seconds": 0.20664069999475032,
+    "spark_test_read_text_materialize_audit_seconds": 0.39460140001028776,
+    "spark_test_text_write_and_package_seconds": 0.1754244000039762,
+    "full_train_text_equivalence_seconds": 5.52936729999783,
+    "full_test_text_equivalence_seconds": 0.019321900006616488
+  },
+  "preprocessing_seconds": 61.435093699998106,
+  "total_seconds_including_full_text_audit": 66.98474849999184,
+  "timing_scope": "Source-label bridge, Spark startup, CSV parsing, exact text construction, source-rating joins, materialized checks, range ordering, Spark Parquet writing, streaming model-file packaging, NPZ export and label equivalence. Full independent text audits reported separately. Excludes downloads, initial environment/input preflight, model training/inference, Spark shutdown and scratch cleanup.",
+  "selection": {
+    "validation": "id % 40 == 0",
+    "training": "id % 40 != 0 and matched and 1 <= cy <= 5",
+    "valid_source_labels": 7108463,
+    "matched_validation": 177607,
+    "eligible_training": 6930856,
+    "document_training_count": 6930689,
+    "delta_vs_document": 167
+  },
+  "transformations": [
+    "Fill null title/comment with empty strings",
+    "text = title + \". \" + comment",
+    "Join verified full source ratings by original id",
+    "Preserve every original row and rating in ag",
+    "Order model files by original id; no stripping/lowercasing/HTML removal/deduplication"
+  ],
+  "logical_equivalence": "All original train/test id/text rows and all source-label entries compared; Parquet bytes/row groups may differ.",
+  "model_consumption": "Pass train_text.parquet, test_text.parquet and the exported clean_y.npz to the existing finetune.py CLI. Source-label eligibility and validation filtering remain in the trainer. Nothing is trained here."
+}

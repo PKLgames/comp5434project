@@ -31,3 +31,7 @@
 *.csv -text
 task2_model/audit/preds/*.npy -text !filter
 task2_model/audit/preds/*.npz -text !filter
+
+# Preserve byte-exact files in the packaged submission (MANIFEST.sha256 hashes);
+# the small prediction arrays are plain blobs so a clone needs no git-lfs.
+task2_final_submission/** -text !filter

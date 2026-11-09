@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.hf/
+data/
+work/
+spark_preprocessing/input/
+spark_preprocessing/work/
+spark_experiments/output/
+*.pt
+*.pth
+*.safetensors
+work_smoke/

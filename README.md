@@ -61,6 +61,11 @@ colab/                  Colab launcher scripts (push / run / shell / stop)
 COLAB.md                how to run this project on a Colab runtime, step by step
 task2_model/audit/      leaderboard solution (0.49893): clean-label recovery,
                         fine-tuning, ensembling + committed predictions
+task2_final_submission/ restructured final deliverable (same solution): Spark
+                        preprocessing -> encoder fine-tuning -> ensembling,
+                        with a `run_pipeline.py smoke` acceptance run and the
+                        pinned input/label contract (docs/DATA_SPEC.md)
+report/                 Task 2 report (PDF) and slides (PPTX)
 ```
 
 ## Quick start

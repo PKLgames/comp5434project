@@ -1,0 +1,2 @@
+# Minimal dependencies for rebuilding the saved submission.
+numpy>=2.2,<3

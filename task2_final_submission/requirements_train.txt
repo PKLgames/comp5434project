@@ -1,0 +1,7 @@
+-r requirements.txt
+scikit-learn==1.7.2
+pyarrow>=25,<27
+scipy>=1.10
+# Install a PyTorch CUDA build suitable for the machine before this file.
+torch>=2.6
+transformers>=4.46,<6
