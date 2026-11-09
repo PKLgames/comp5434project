@@ -2,6 +2,18 @@
 
 This folder combines both members' essential Task 2 work: Spark data preparation and feature experiments, source-rating recovery, encoder fine-tuning, four-member ensembling, two-member pruning, calibration, submission checks and timing. The README is in English. Commands run **one stage at a time**; opening this folder runs nothing.
 
+## 0. Package layout
+
+The submission archive keeps the report and the code in two sibling folders:
+
+```text
+comp5434project_submission/
+  code/     everything in this folder (this README lives here)
+  report/   Task2_Report_English.pdf + slides_Task2.pptx
+```
+
+Commands in this README are run from `code/`; the report is at `../report/`.
+
 ## 1. Package map
 
 | Location | Purpose |
