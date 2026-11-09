@@ -7,7 +7,7 @@
 > 见 [`audit/DATA_SPEC.md`](audit/DATA_SPEC.md)；一键校对：`python audit/check_data.py --train-csv
 > ../Dataset2_metadata/train.csv --test-csv ../Dataset2_metadata/test.csv --clean
 > audit/preds/clean_y.npz --preds-dir audit/preds`（期望 `ALL CHECKS PASSED`）。
-两成员裁剪版 **`submission_pruned.csv` → 0.49914**（只差 0.0002，本机 CPU 推理 157 s vs 403 s）。
+两成员裁剪版 **`submission_pruned.csv` → 0.49914**（只差 0.0002，本机 CPU 推理 157 s vs 403 s；计时用**同架构基座权重**实测，最终微调权重未留秒表记录，口径见 [`ENV_AND_TIMING.md`](ENV_AND_TIMING.md) §7.2）。
 
 ## 1. 成绩轨迹
 
@@ -65,6 +65,8 @@
 | **s1 + b1（0.33 / 0.67）** | **0.5255** | **+0.0010** | **≈157 s** |
 | s1 + d1（0.5 / 0.5） | 0.5302 | +0.0057 | — |
 | 4 成员（现状） | 0.5245 | — | ≈403 s |
+
+> 推理耗时列：本机 CPU（16 线程）、**同架构基座权重**实测，最终微调权重的 `ft3_*.pt` 已随 Colab 实例销毁，未留秒表记录。
 
 - 上线结果：`submission_pruned.csv` → **0.49914**（4 成员 0.49893），差 0.0002，属噪声级别。
 - 权重只在验证集**偶数半区**上网格搜索（步长 0.01，w_s1=0.33），isotonic 同样在偶数半区拟合，
