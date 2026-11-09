@@ -255,3 +255,8 @@ full-data counts and the complete label domain, which a truncated input cannot s
 text rule, eligibility filter, split rule, id alignment and Parquet schemas are identical.
 Useful options: `--rows`, `--limit`, `--model`, `--epochs`, `--maxlen`, `--device`,
 `--preprocess-only`, `--force`. Smoke numbers are a plumbing check, not a score estimate.
+
+Verified environment for the numbers above (one-off run, 2026-11-09): Temurin JRE
+`17.0.21+9` (JAVA_HOME), `pyspark==4.0.1`, `torch==2.14.1+cpu`, `transformers==5.20.2`,
+Python 3.10.12, 16 threads / 7 GB, no GPU. Spark driver runs in `local[2]` with 2 GB; the
+encoder is trained and applied on CPU, so no CUDA is required for the acceptance path.
