@@ -21,7 +21,7 @@
 | 硬件 | 本机 CPU | **12th Gen Intel Core i7-1260P**，8 核 16 线程，7 GB 内存，无 GPU | 实测（`lscpu` / `free`） |
 | 硬件 | 训练加速器 s1 | **NVIDIA L4**，23,034 MiB 显存，12 vCPU，52 GB 内存，113 GB 磁盘 | 实测（会话日志） |
 | 硬件 | 训练加速器 s2 / d1 / b1 | **NVIDIA RTX PRO 6000 Blackwell**（Colab G4），97,887 MiB 显存，48 vCPU，176 GB 内存 | 实测（会话日志） |
-| 硬件 | 云端 CPU 型号 | **未记录**；按 48 vCPU / 176 GB 推断属 GCP G4 系列 `g4-standard-48` 一类机型，微架构未知（见 §1 说明） | 未记录 / 推断 |
+| 硬件 | 云端 CPU 型号 | L4：**Intel Xeon @ 2.20 GHz**（6 核 12 线程）；G4：**AMD EPYC 9B45**（24 核 48 线程，AVX-512） | 实测（2026-11-09 复现会话） |
 | 硬件 | 推理硬件 | 本文档所有推理耗时均为**本机 CPU（16 线程）**实测；Colab 侧为按吞吐折算的采用值 | 实测 / 采用值 |
 | 效率 | 每轮训练耗时 | s1 **3,813 s**；s2 ≈**1,132 s**；d1 **1,872 s**；b1 **1,674 s** | 推导（步数 × 实测 it/s，与实测总量差 < 5%） |
 | 效率 | 训练总时长 | **17,609 s ≈ 4.89 h**（4 个模型 × 2 轮，串行） | 实测 |
@@ -47,7 +47,18 @@
 - **b1 确认跑在 G4 上**（RTX PRO 6000 Blackwell，97,887 MiB 显存，48 vCPU，176 GB 内存），不是 L4 也不是 T4。b1 是单模型最强的一个（验证 0.5328），也是集成权重最大的一项（0.562）。
 - L4 的磁盘为 113 GB；G4 磁盘未记录。
 - **线程数**：云主机 `nproc` 返回的就是 vCPU 数（每 vCPU 1 线程）：L4 = 12 线程、G4 = 48 线程；本机 16 线程。
-- **云端 CPU 型号：未记录，且无法事后补齐**。当时只采集了 `nproc`（L4=12、G4=48）与内存（52 GB / 176 GB），没有跑 `lscpu`；Colab 会话销毁后主机信息不可再查，日志里也没有任何 CPU 型号字符串（已对两个 JSONL 全文检索 `Xeon`/`EPYC`/`model name`，零命中）。要补只能在下一次会话执行 `lscpu | grep 'Model name'` 并记录。唯一可确认的是核数与内存量级（见上表），据此可判断 G4 是 48 vCPU / 176 GB 的高核数机型。
+- **云端 CPU 型号（2026-11-09 补测，实测）**：训练会话本身已销毁、当时未跑 `lscpu`，
+  因此在同加速器类型的新会话上补测，得到该机型实际配置：
+
+  | 加速器 | CPU 型号 | 核 / 线程 | 内存 | GPU |
+  | --- | --- | --- | ---: | --- |
+  | **L4** | `Intel(R) Xeon(R) CPU @ 2.20GHz`（GenuineIntel） | 6 核 / 12 线程 | 52 GB | `NVIDIA L4`, 23,034 MiB |
+  | **G4** | `AMD EPYC 9B45`（AuthenticAMD，family 26, model 2） | 24 核 / 48 线程 | 176 GB | `NVIDIA RTX PRO 6000 Blackwell Server Edition`, 97,887 MiB |
+
+  补测命令：`colab new -s <name> --gpu {L4,G4}` → `colab ssh ... 'lscpu; nproc; free -g; nvidia-smi --query-gpu=name,memory.total --format=csv'`
+  → `colab stop -s <name>`。两次会话合计约 4 分钟、≈0.5 CU（余额 142.87 → 98.42 CU，其中大部分是此前训练消耗）。
+  口径说明：这证明的是**该 Colab 加速器机型**的 CPU 配置，而非当时那台已销毁实例的同一台机器。
+- **原推断作废**：此前"按 48 vCPU / 176 GB 推断为 GCP `g4-standard-48`"的说法已被实测取代（G4 实为 AMD EPYC 9B45 + 24 核开超线程）。
 - GPU 型号在日志里有直接输出：`torch.cuda.get_device_name(0)` → `NVIDIA L4`（2026-11-07T15:59:16Z 的 bench 单元）。
 
 ## 2. 软件版本
